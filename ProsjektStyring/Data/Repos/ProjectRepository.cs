@@ -43,10 +43,23 @@ namespace ProsjektStyring.Models.Repositorys
             return projects;
         }
 
+        public async Task<List<Project>> GetUnActivatedProjectsAsync()
+        {
+            var projects = await Task.Run(() => _db.Project.Where(x => x.ProjectActive == false && x.ProjectCompleted == false).ToList());
+            return projects;
+        }
+
         public async Task<List<Project>> GetCompletedProjectsAsync()
         {
             var projects = await Task.Run(() => _db.Project.Where(x => x.ProjectCompleted == true).ToList());
             return projects;
         }
+
+        public async Task<Project> GetProjectByUniqueId(string id)
+        {
+            var p = await Task.Run(() => _db.Project.FirstOrDefault(x => x.Unique_ProjectIdString == id));
+            return p;
+        }
+
     }
 }

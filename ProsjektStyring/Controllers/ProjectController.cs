@@ -20,14 +20,31 @@ namespace ProsjektStyring.Controllers
             _projectRepository = Pr;
             _userManager = uM;
         }
+
         [HttpGet]
+        [Route("Project/")]
         public async Task<IActionResult> Index()
         {
             IndexViewModel model = new IndexViewModel
             {
+                UnActivatedProjects = await _projectRepository.GetUnActivatedProjectsAsync(),
                 ActiveProjects = await _projectRepository.GetActiveProjectsAsync(),
                 CompletedProjects = await _projectRepository.GetCompletedProjectsAsync()
             };
+            return View(model);
+        }
+
+        [HttpGet]
+        [Route("Project/{id}")]
+        public async Task<IActionResult> ViewProject([FromRoute] string id)
+        {            
+            Project p = await _projectRepository.GetProjectByUniqueId(id);
+
+            ViewProjectViewModel model = new ViewProjectViewModel
+            {
+                Project = p
+            };
+
             return View(model);
         }
 
@@ -39,26 +56,25 @@ namespace ProsjektStyring.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProject([FromForm]
-        [Bind("ProjectName","ProjectClient","ProjectDescription","ProjectPlannedStart","ProjectPlannedEnd")] CreateProjectViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProject([FromForm][Bind("ProjectName","ProjectClient","ProjectDescription","ProjectPlannedStart","ProjectPlannedEnd")] CreateProjectViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
 
-                var p = new Project
-                {
-                    ProjectName = model.ProjectName,
-                    ProjectClient = model.ProjectClient,
-                    ProjectDescription = model.ProjectDescription,
-                    ProjectPlannedStart = model.ProjectPlannedStart,
-                    ProjectPlannedEnd = model.ProjectPlannedEnd,
-                    ProjectCreatedByUser = user.UserName
-                };
+                Project p = new Project { };
+                p.ProjectName = model.ProjectName;
+                p.ProjectClient = model.ProjectClient;
+                p.ProjectDescription = model.ProjectDescription;
+                p.ProjectPlannedStart = model.ProjectPlannedStart;
+                p.ProjectPlannedEnd = model.ProjectPlannedEnd;
+                p.ProjectCreatedByUser = user.UserName;
+
                 var r = await _projectRepository.CreateProject(p);
                 if (r != null)
                 {
-                    return RedirectToAction("ProjectSetup", new { id = r});
+                    return RedirectToAction("ViewProject", new { id = r});
                 }
                 else
                 {

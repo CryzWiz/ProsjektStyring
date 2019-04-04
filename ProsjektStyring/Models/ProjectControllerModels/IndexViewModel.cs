@@ -8,7 +8,7 @@ namespace ProsjektStyring.Models.ProjectControllerModels
 {
     public class IndexViewModel
     {
-
+        public List<Project> UnActivatedProjects { get; set; }
         public List<Project> ActiveProjects { get; set; }
         public List<Project> CompletedProjects { get; set; }
 
