@@ -21,10 +21,16 @@ namespace ProsjektStyring.Data
         public string TaskName { get; set; }
         public string TaskDescription { get; set; }
         public string TaskStatus { get; set; }
+
         public string TaskUnderUser { get; set; }
+        public bool LockedUnderUser { get; set; }
+
         public bool Active { get; set; }
+
+        public double PlannedHours { get; set; }
+        public double TotalHoursSpent { get; set; }
         public DateTime TaskRegistered { get; set; }
-        public DateTime TaskStarted { get; set; }
+        public DateTime TaskDueDate { get; set; }
         public DateTime TaskCleared { get; set; }
         public string TaskClearedByUser { get; set; }
 
