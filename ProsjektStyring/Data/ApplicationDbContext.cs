@@ -14,7 +14,7 @@ namespace ProsjektStyring.Data
         }
 
         public virtual DbSet<Project> Project { get; set; }
-        public virtual DbSet<ProjectTask> ProjectTask { get; set; }
+        public virtual DbSet<ProjectCycleTask> ProjectTask { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

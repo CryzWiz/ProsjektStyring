@@ -15,7 +15,7 @@ namespace ProsjektStyring.Data
         public string ProjectClient { get; set; }
         public string ProjectDescription { get; set; }
 
-        public int ProjectCycles { get; set; }
+        public int NumberOfProjectCycles { get; set; }
 
         public bool ProjectActive { get; set; }
         public bool ProjectCompleted { get; set; }
@@ -29,7 +29,7 @@ namespace ProsjektStyring.Data
         public string ProjectCreatedByUser { get; set; }
         public string ProjectClosedByUser { get; set; }
 
-        public List<ProjectTask> ProjectTasks { get; set; }
+        public List<ProjectCycle> ProjectCycles { get; set; }
 
     }
 }

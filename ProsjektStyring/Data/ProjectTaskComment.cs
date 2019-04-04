@@ -11,9 +11,9 @@ namespace ProsjektStyring.Data
     {
         [Key]
         public int ProjectTaskCommentId { get; set; }
-        public int ProjectTaskId { get; set; }
-        [ForeignKey("ProjectTaskId")]
-        public ProjectTask ProjectTask { get; set; }
+        public int ProjectCycleTaskId { get; set; }
+        [ForeignKey("ProjectCycleTaskId")]
+        public ProjectCycleTask ProjectCycleTask { get; set; }
 
         public DateTime CommentRegistered { get; set; }
         public string ByUser { get; set; }

@@ -29,5 +29,7 @@ namespace ProsjektStyring.Data
         public DateTime CycleStart { get; set; }
         public DateTime CyclePlannedEnd { get; set; }
         public DateTime CycleEnd { get; set; }
+
+        public List<ProjectCycleTask> ProjectCycleTasks { get; set; }
     }
 }

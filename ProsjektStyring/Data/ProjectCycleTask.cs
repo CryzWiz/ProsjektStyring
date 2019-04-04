@@ -7,15 +7,16 @@ using System.Threading.Tasks;
 
 namespace ProsjektStyring.Data
 {
-    public class ProjectTask
+    public class ProjectCycleTask
     {
         [Key]
-        public int ProjectTaskId { get; set; }
+        public int ProjectCycleTaskId { get; set; }
+        public string Unique_TaskIdString { get; set; }
+
         public int ProjectCycleId { get; set; }
         [ForeignKey("ProjectCycleId")]
         public ProjectCycle ProjectCycle { get; set; }
 
-        public string Unique_TaskIdString { get; set; }
         public string TaskName { get; set; }
         public string TaskDescription { get; set; }
         public string TaskStatus { get; set; }
@@ -35,6 +36,8 @@ namespace ProsjektStyring.Data
 
         public DateTime TaskCleared { get; set; }
         public string TaskClearedByUser { get; set; }
+
+        public List<ProjectTaskComment> ProjectTaskComments { get; set; }
 
     }
 }
