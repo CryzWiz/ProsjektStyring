@@ -14,9 +14,15 @@ namespace ProsjektStyring.Data
         public string ProjectName { get; set; }
         public string ProjectClient { get; set; }
         public string ProjectDescription { get; set; }
+
         public int ProjectCycles { get; set; }
-        public bool Active { get; set; }
+
+        public bool ProjectActive { get; set; }
+        public bool ProjectCompleted { get; set; }
+
+        public DateTime ProjectPlannedStart { get; set; }
         public DateTime ProjectStart { get; set; }
+        public DateTime ProjectPlannedEnd { get; set; }
         public DateTime ProjectEnd { get; set; }
         public DateTime ProjectRegistered { get; set; }
 

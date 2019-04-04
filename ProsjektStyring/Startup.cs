@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using ProsjektStyring.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProsjektStyring.Models.IRepositorys;
+using ProsjektStyring.Models.Repositorys;
 
 namespace ProsjektStyring
 {
@@ -42,7 +44,10 @@ namespace ProsjektStyring
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
+            services.AddTransient<IProjectRepository, ProjectRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -11,12 +11,10 @@ namespace ProsjektStyring.Data
     {
         [Key]
         public int ProjectTaskId { get; set; }
-        public int ProjectId { get; set; }
-        [ForeignKey("ProjectId")]
-        public Project Project { get; set; }
+        public int ProjectCycleId { get; set; }
+        [ForeignKey("ProjectCycleId")]
+        public ProjectCycle ProjectCycle { get; set; }
 
-
-        public int ProjectCycle { get; set; }
         public string Unique_TaskIdString { get; set; }
         public string TaskName { get; set; }
         public string TaskDescription { get; set; }
@@ -25,7 +23,8 @@ namespace ProsjektStyring.Data
         public string TaskUnderUser { get; set; }
         public bool LockedUnderUser { get; set; }
 
-        public bool Active { get; set; }
+        public bool TaskActive { get; set; }
+        public bool TaskCompleted { get; set; }
 
         public double PlannedHours { get; set; }
         public double TotalHoursSpent { get; set; }
