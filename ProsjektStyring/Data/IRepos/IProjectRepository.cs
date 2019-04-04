@@ -10,6 +10,6 @@ namespace ProsjektStyring.Models.IRepositorys
     {
         Task<List<Project>> GetActiveProjectsAsync();
         Task<List<Project>> GetCompletedProjectsAsync();
-        Task<bool> CreateProject(Project project);
+        Task<string> CreateProject(Project project);
     }
 }

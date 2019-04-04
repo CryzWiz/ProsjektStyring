@@ -12,11 +12,13 @@ namespace ProsjektStyring.Controllers
     {
         public IActionResult Index()
         {
+            ViewData["Title"] = "Prosjektstyring";
             return View();
         }
 
         public IActionResult Privacy()
         {
+            ViewData["Title"] = "Privacy";
             return View();
         }
 
