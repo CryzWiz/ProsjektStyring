@@ -29,8 +29,11 @@ namespace ProsjektStyring.Data
 
         public double PlannedHours { get; set; }
         public double TotalHoursSpent { get; set; }
+        public int ProsentageDone { get; set; }
+
         public DateTime TaskRegistered { get; set; }
         public DateTime TaskDueDate { get; set; }
+
         public DateTime TaskCleared { get; set; }
         public string TaskClearedByUser { get; set; }
 
