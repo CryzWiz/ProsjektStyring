@@ -10,23 +10,24 @@
     <a asp-action="CreateProject">Opprett nytt prosjekt</a>
 </p>
 
-
-@if (Model.ActiveProjects.Count > 0 || Model.CompletedProjects.Count > 0 || Model.UnActivatedProjects.Count > 0)
+@if (Model.UnActivatedProjects.Count > 0)
 {
     <table class="table">
         <thead>
             <tr>
-                <th></th>
+                <th>Prosjekt</th>
+                <th>Alternativer</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.UnActivatedProjects)
             {
                 <tr>
+                    <td>@item.ProjectName</td>
                     <td>
-                        @Html.ActionLink("Edit", "Endre", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Detaljer", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Slett", new { /* id=item.PrimaryKey */ })
+                        @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }) |
+                        @Html.ActionLink("Slett", "Delete", new { /* id=item.PrimaryKey */ })
                     </td>
                 </tr>
             }
@@ -34,50 +35,59 @@
     </table>
 
     <hr />
+}
 
+@if (Model.ActiveProjects.Count > 0)
+{
     <table class="table">
         <thead>
             <tr>
-                <th></th>
+                <th>Prosjekt</th>
+                <th>Alternativer</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.ActiveProjects)
             {
-                <tr>
-                    <td>
-                        @Html.ActionLink("Edit", "Endre", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Detaljer", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Slett", new { /* id=item.PrimaryKey */ })
-                    </td>
-                </tr>
+            <tr>
+                <td>@item.ProjectName</td>
+                <td>
+                    @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }) |
+                    @Html.ActionLink("Slett", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
             }
         </tbody>
     </table>
 
     <hr />
-
+}
+@if (Model.CompletedProjects.Count > 0)
+{
     <table class="table">
         <thead>
             <tr>
-                <th></th>
+                <th>Prosjekt</th>
+                <th>Alternativer</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.CompletedProjects)
             {
-                <tr>
-                    <td>
-                        @Html.ActionLink("Edit", "Endre", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Detaljer", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Slett", new { /* id=item.PrimaryKey */ })
-                    </td>
-                </tr>
+            <tr>
+                <td>@item.ProjectName</td>
+                <td>
+                    @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }) |
+                    @Html.ActionLink("Slett", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
             }
         </tbody>
     </table>
 }
-else
+@if(Model.UnActivatedProjects.Count == 0 && Model.CompletedProjects.Count == 0 && Model.ActiveProjects.Count == 0)
 {
-    <h4>Ingen prosjekter funnet!</h4>
+    <h4 style="color:red;">Ingen prosjekter funnet!</h4>
 }

@@ -11,6 +11,7 @@ namespace ProsjektStyring.Data
         [Key]
         public int ProjectId { get; set; }
         public string Unique_ProjectIdString { get; set; }
+
         public string ProjectName { get; set; }
         public string ProjectClient { get; set; }
         public string ProjectDescription { get; set; }
@@ -30,6 +31,7 @@ namespace ProsjektStyring.Data
         public string ProjectClosedByUser { get; set; }
 
         public List<ProjectCycle> ProjectCycles { get; set; }
+        public List<ProjectComment> ProjectComments { get; set; }
 
     }
 }

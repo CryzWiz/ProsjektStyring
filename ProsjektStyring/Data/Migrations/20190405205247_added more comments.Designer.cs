@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProsjektStyring.Data;
 
 namespace ProsjektStyring.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190405205247_added more comments")]
+    partial class addedmorecomments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,9 +243,11 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<DateTime>("CommentRegistered");
 
-                    b.Property<int>("ProjectId");
+                    b.Property<int?>("ProjectId");
 
                     b.Property<int>("ReplyToComment");
+
+                    b.Property<string>("Unique_ProjectIdString");
 
                     b.HasKey("ProjectCommentId");
 
@@ -278,9 +282,11 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<DateTime>("CycleStart");
 
-                    b.Property<int>("ProjectId");
+                    b.Property<int?>("ProjectId");
 
                     b.Property<string>("Unique_CycleIdString");
+
+                    b.Property<string>("Unique_ProjectIdString");
 
                     b.HasKey("ProjectCycleId");
 
@@ -301,9 +307,11 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<DateTime>("CommentRegistered");
 
-                    b.Property<int>("ProjectCycleId");
+                    b.Property<int?>("ProjectCycleId");
 
                     b.Property<int>("ReplyToComment");
+
+                    b.Property<string>("Unique_CycleIdString");
 
                     b.HasKey("ProjectCycleCommentId");
 
@@ -322,7 +330,7 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<double>("PlannedHours");
 
-                    b.Property<int>("ProjectCycleId");
+                    b.Property<int?>("ProjectCycleId");
 
                     b.Property<int>("ProsentageDone");
 
@@ -348,6 +356,8 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<double>("TotalHoursSpent");
 
+                    b.Property<string>("Unique_CycleIdString");
+
                     b.Property<string>("Unique_TaskIdString");
 
                     b.HasKey("ProjectCycleTaskId");
@@ -369,7 +379,9 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<DateTime>("CommentRegistered");
 
-                    b.Property<int>("ProjectCycleTaskId");
+                    b.Property<int?>("ProjectCycleTaskId");
+
+                    b.Property<string>("Unique_TaskIdString");
 
                     b.HasKey("ProjectTaskCommentId");
 
@@ -427,40 +439,35 @@ namespace ProsjektStyring.Data.Migrations
                 {
                     b.HasOne("ProsjektStyring.Data.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("ProsjektStyring.Data.ProjectCycle", b =>
                 {
                     b.HasOne("ProsjektStyring.Data.Project", "Project")
                         .WithMany("ProjectCycles")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("ProsjektStyring.Data.ProjectCycleComment", b =>
                 {
                     b.HasOne("ProsjektStyring.Data.ProjectCycle", "ProjectCycle")
                         .WithMany()
-                        .HasForeignKey("ProjectCycleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectCycleId");
                 });
 
             modelBuilder.Entity("ProsjektStyring.Data.ProjectCycleTask", b =>
                 {
                     b.HasOne("ProsjektStyring.Data.ProjectCycle", "ProjectCycle")
                         .WithMany("ProjectCycleTasks")
-                        .HasForeignKey("ProjectCycleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectCycleId");
                 });
 
             modelBuilder.Entity("ProsjektStyring.Data.ProjectTaskComment", b =>
                 {
                     b.HasOne("ProsjektStyring.Data.ProjectCycleTask", "ProjectCycleTask")
                         .WithMany("ProjectTaskComments")
-                        .HasForeignKey("ProjectCycleTaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectCycleTaskId");
                 });
 #pragma warning restore 612, 618
         }

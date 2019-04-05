@@ -13,8 +13,8 @@ namespace ProsjektStyring.Data
         public int ProjectCycleId { get; set; }
         public string Unique_CycleIdString { get; set; }
 
-        public int ProjectId { get; set; }
         [ForeignKey("ProjectId")]
+        public int ProjectId { get; set; }
         public Project Project { get; set; }
 
         public string CycleName { get; set; }
@@ -31,5 +31,6 @@ namespace ProsjektStyring.Data
         public DateTime CycleEnd { get; set; }
 
         public List<ProjectCycleTask> ProjectCycleTasks { get; set; }
+        public List<ProjectCycleComment> ProjectCycleComments { get; set; }
     }
 }

@@ -13,8 +13,8 @@ namespace ProsjektStyring.Data
         public int ProjectCycleTaskId { get; set; }
         public string Unique_TaskIdString { get; set; }
 
-        public int ProjectCycleId { get; set; }
         [ForeignKey("ProjectCycleId")]
+        public int ProjectCycleId { get; set; }
         public ProjectCycle ProjectCycle { get; set; }
 
         public string TaskName { get; set; }

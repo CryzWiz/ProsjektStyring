@@ -7,10 +7,12 @@
 <div>
     <h4>Oversikt for @Model.Project.ProjectName</h4>
     <hr />
-    <dl class="row">
+    <dl>
         <dd>@Model.Project.Unique_ProjectIdString</dd>
         <dd>@Model.Project.ProjectName</dd>
         <dd>@Model.Project.ProjectCreatedByUser</dd>
+        <dd>@Model.Project.ProjectCycles.Count</dd>
+        <dd>@Model.Project.ProjectComments.Count</dd>
     </dl>
 </div>
 <div>

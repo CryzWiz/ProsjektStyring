@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ProsjektStyring.Data;
 using ProsjektStyring.Models.IRepositorys;
 using System;
@@ -11,28 +12,40 @@ namespace ProsjektStyring.Models.Repositorys
     public class ProjectRepository : IProjectRepository
     {
 
-        private readonly UserManager<ApplicationUser> _userManager;
         private ApplicationDbContext _db;
 
-        public ProjectRepository(ApplicationDbContext db, UserManager<ApplicationUser> um)
+        public ProjectRepository(ApplicationDbContext db)
         {
             _db = db;
-            _userManager = um;
         }
 
 
         public async Task<string> CreateProject(Project project)
         {
-            Guid g = Guid.NewGuid();
-            string GuidString = Convert.ToBase64String(g.ToByteArray());
-            GuidString = GuidString.Replace("=", "");
-            GuidString = GuidString.Replace("+", "");
 
             project.ProjectRegistered = DateTime.Now;
-            project.Unique_ProjectIdString = GuidString;
+            project.Unique_ProjectIdString = getGuid();
+           
+            ProjectCycle initCycle = new ProjectCycle
+            {
+                CycleName = "Mine Oppgaver",
+                CycleRegistered = DateTime.Now,
+                Unique_CycleIdString = getGuid(),
+                CyclePlannedStart = project.ProjectPlannedStart,
+                CyclePlannedEnd = project.ProjectPlannedEnd,
+                CycleDescription = "Du kan opprette alle oppgaver under denne syklusen, eller du kan lage flere sykluser. Hver syklus kan ha mange arbeidsoppgaver."
+            };
+
+            List<ProjectCycle> initList = new List<ProjectCycle>();
+            initList.Add(initCycle);
+            project.ProjectCycles = initList;
 
             await _db.AddAsync(project);
-            if (await _db.SaveChangesAsync() > 0) { return GuidString; }
+            if (await _db.SaveChangesAsync() > 0)
+            {
+
+                return project.Unique_ProjectIdString;
+            }
             else return null;
         }
 
@@ -57,8 +70,22 @@ namespace ProsjektStyring.Models.Repositorys
 
         public async Task<Project> GetProjectByUniqueId(string id)
         {
-            var p = await Task.Run(() => _db.Project.FirstOrDefault(x => x.Unique_ProjectIdString == id));
-            return p;
+            var project = await Task.Run(() => _db.Project.Include("ProjectCycles").Include("ProjectComments").FirstOrDefault(x => x.Unique_ProjectIdString == id));
+            return project;
+        }
+
+
+
+
+        /// Helpers
+        /// 
+        private string getGuid()
+        {
+            Guid g = Guid.NewGuid();
+            string GuidString = Convert.ToBase64String(g.ToByteArray());
+            GuidString = GuidString.Replace("=", "");
+            GuidString = GuidString.Replace("+", "");
+            return GuidString;
         }
 
     }
