@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProsjektStyring.Data;
 using ProsjektStyring.Models.IRepositorys;
 using ProsjektStyring.Models.ProjectControllerModels;
+using ProsjektStyring.Models.SeedData;
 
 namespace ProsjektStyring.Controllers
 {
@@ -23,6 +25,7 @@ namespace ProsjektStyring.Controllers
 
         [HttpGet]
         [Route("Project/")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
         public async Task<IActionResult> Index()
         {
             IndexViewModel model = new IndexViewModel
@@ -36,6 +39,7 @@ namespace ProsjektStyring.Controllers
 
         [HttpGet]
         [Route("Project/{id}")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
         public async Task<IActionResult> ViewProject([FromRoute] string id)
         {            
             Project p = await _projectRepository.GetProjectByUniqueId(id);
@@ -49,6 +53,7 @@ namespace ProsjektStyring.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
         public IActionResult CreateProject()
         {
             CreateProjectViewModel model = new CreateProjectViewModel { };
@@ -57,6 +62,7 @@ namespace ProsjektStyring.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
         public async Task<IActionResult> CreateProject([FromForm][Bind("ProjectName","ProjectClient","ProjectDescription","ProjectPlannedStart","ProjectPlannedEnd")] CreateProjectViewModel model)
         {
             if (ModelState.IsValid)
