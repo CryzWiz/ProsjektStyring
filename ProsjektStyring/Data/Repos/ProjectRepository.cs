@@ -39,6 +39,7 @@ namespace ProsjektStyring.Models.Repositorys
             List<ProjectCycle> initList = new List<ProjectCycle>();
             initList.Add(initCycle);
             project.ProjectCycles = initList;
+            project.NumberOfProjectCycles = initList.Count;
 
             await _db.AddAsync(project);
             if (await _db.SaveChangesAsync() > 0)

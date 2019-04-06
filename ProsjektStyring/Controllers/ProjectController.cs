@@ -53,7 +53,7 @@ namespace ProsjektStyring.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public IActionResult CreateProject()
         {
             CreateProjectViewModel model = new CreateProjectViewModel { };
@@ -62,7 +62,7 @@ namespace ProsjektStyring.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> CreateProject([FromForm][Bind("ProjectName","ProjectClient","ProjectDescription","ProjectPlannedStart","ProjectPlannedEnd")] CreateProjectViewModel model)
         {
             if (ModelState.IsValid)
@@ -95,5 +95,6 @@ namespace ProsjektStyring.Controllers
             }
             
         }
+
     }
 }
