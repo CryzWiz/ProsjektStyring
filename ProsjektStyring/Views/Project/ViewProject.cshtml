@@ -15,7 +15,23 @@
         <dd>@Model.Project.ProjectComments.Count</dd>
     </dl>
 </div>
+<div id="PC">
+
+
+</div>
+
+<div id="PC-C">
+
+
+</div>
+
+
 <div>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Tilbake til oversikten</a>
 </div>
+
+
+@section Scripts {
+   <script src="~/js/viewproject.js"></script>
+}
