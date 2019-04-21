@@ -52,7 +52,6 @@ namespace ProsjektStyring.Models.Repositorys
             else return null;
         }
 
-
         public async Task<List<Project>> GetActiveProjectsAsync()
         {
             var projects = await Task.Run(() => _db.Project.Where(x => x.ProjectActive == true).ToList());
