@@ -34,11 +34,33 @@ namespace ProsjektStyring.Controllers
         // [Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")] 
         [HttpPost("AddProjectCycle")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
-        public IActionResult AddProjectCycle([FromBody] AddProjectCycle projectCycle)
+        public async Task<IActionResult> AddProjectCycle([FromBody] AddProjectCycle projectCycle)
         {
-            return Ok("data recived: "+ projectCycle.projectId + ","+ projectCycle.user+ ","
-                + projectCycle.cycleName + ","+ projectCycle.cycleDescription + ","
-                + projectCycle.startDate + ","+ projectCycle.endDate);
+            if (ModelState.IsValid)
+            {
+                var result = await _projectRepository.AddCycleToProjectAsync(projectCycle);
+
+                if (result != null)
+                {
+                    ProjectCycle c = new ProjectCycle
+                    {
+                        CycleActive = result.CycleActive,
+                        CycleName = result.CycleName,
+                        CycleDescription = result.CycleDescription,
+                        CyclePlannedStart = result.CyclePlannedStart,
+                        CyclePlannedEnd = result.CyclePlannedEnd,
+                        Unique_CycleIdString = result.Unique_CycleIdString,
+                        CycleNumber = result.CycleNumber
+                    };
+                    return Ok(c);
+                }
+                else return Ok("error");
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
         }
 
         [HttpGet("AddProjectComment")]
