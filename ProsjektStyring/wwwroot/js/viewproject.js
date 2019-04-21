@@ -57,13 +57,14 @@ function AddProjectCycle(u, pid, cn, cd, sd, ed) {
             // Request finished. Do processing here.
             var res = JSON.parse(request.responseText);
             console.log("AddProjectCycle: " + request.responseText);
+            // create a new row
             var table = document.getElementById("CT");
             var row = table.insertRow(res.cycleNumber);
             var cell1 = row.insertCell(0); var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2); var cell4 = row.insertCell(3);
             var cell5 = row.insertCell(4); var cell6 = row.insertCell(5);
             var cell7 = row.insertCell(6);
-
+            // create node for all the new cells
             var cNum = document.createTextNode(res.cycleNumber);
             var cName = document.createTextNode(res.cycleName);
             var cDesc = document.createTextNode(res.cycleDescription);
@@ -71,8 +72,12 @@ function AddProjectCycle(u, pid, cn, cd, sd, ed) {
             var cEd = document.createTextNode(res.cyclePlannedEnd);
             var a = res.cycleActive ? "Åpen" : "Stengt";
             var cA = document.createTextNode(a);
-            var link = document.createTextNode('<a href="ViewProjectCycle/@item.Unique_CycleIdString">Detaljer</a>')
- 
+            var link = document.createElement('a');
+            var linkText = document.createTextNode("Detaljer");
+            link.appendChild(linkText);
+            link.title = "Detaljer";
+            link.href = "ViewProjectCycle/" + res.unique_CycleIdString;
+            // append the new cell content
             cell1.appendChild(cNum); cell2.appendChild(cName);
             cell3.appendChild(cDesc); cell4.appendChild(cSd);
             cell5.appendChild(cEd); cell6.appendChild(cA);
