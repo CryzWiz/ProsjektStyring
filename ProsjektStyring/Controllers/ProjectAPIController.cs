@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProsjektStyring.Data;
 using ProsjektStyring.Models.IRepositorys;
+using ProsjektStyring.Models.ProjectApiControllerModels;
 using ProsjektStyring.Models.SeedData;
 
 namespace ProsjektStyring.Controllers
@@ -30,12 +31,14 @@ namespace ProsjektStyring.Controllers
         {
             return Ok("Teststring");
         }
-
+        // [Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")] 
         [HttpPost("AddProjectCycle")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
-        public IActionResult AddProjectCycle([FromBody]string pid, string user, string cname, string cdescription, DateTime startdate, DateTime enddate)
+        public IActionResult AddProjectCycle([FromBody] AddProjectCycle projectCycle)
         {
-            return Ok("data recived: "+pid + ","+user+","+cname+","+cdescription+","+startdate+","+enddate);
+            return Ok("data recived: "+ projectCycle.projectId + ","+ projectCycle.user+ ","
+                + projectCycle.cycleName + ","+ projectCycle.cycleDescription + ","
+                + projectCycle.startDate + ","+ projectCycle.endDate);
         }
 
         [HttpGet("AddProjectComment")]
