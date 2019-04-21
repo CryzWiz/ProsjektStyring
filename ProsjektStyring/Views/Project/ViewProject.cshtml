@@ -5,25 +5,134 @@
 }
 
 <div>
-    <h4>Oversikt for @Model.Project.ProjectName</h4>
+    <h4 class="text-center">Oversikt for @Model.Project.ProjectName</h4>
     <hr />
-    <dl>
-        <dd>@Model.Project.Unique_ProjectIdString</dd>
-        <dd>@Model.Project.ProjectName</dd>
-        <dd>@Model.Project.ProjectCreatedByUser</dd>
-        <dd>@Model.Project.ProjectCycles.Count</dd>
-        <dd>@Model.Project.ProjectComments.Count</dd>
-    </dl>
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <dl>
+                        <dd><b>Prosjekt for:</b></dd>
+                        <dd><b>Beskrivelse:</b></dd>
+                        <dd><b>Planlagt start:</b></dd>
+                        <dd><b>Planlagt slutt:</b></dd>
+                    </dl>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    <dl>
+                        <dd>@Model.Project.ProjectClient</dd>
+                        <dd>@Model.Project.ProjectDescription</dd>
+                        <dd>@Model.Project.ProjectPlannedStart</dd>
+                        <dd>@Model.Project.ProjectPlannedEnd</dd>
+
+                    </dl>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1"></div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <dl>
+                        <dd><b>Status:</b></dd>
+
+                    </dl>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    <dl>
+                        @if (Model.Project.ProjectActive)
+                        {
+                            <dd><span style="color:green">Aktiv</span></dd>
+                        }
+                        else if (!Model.Project.ProjectActive && Model.Project.ProjectCompleted)
+                        {
+                            <dd><span style="color:green">Prosjekt fullført!</span></dd>
+                        }
+                        else
+                        {
+                            <dd><span style="color:red">Ikke aktiv</span></dd>
+                        }
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="PC">
+<hr />
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div id="PC-C">
+            <h4 class="text-center">Prosjekt-sykluser</h4>
+            <table class="table table-hover" id="CT">
+                <thead>
+                    <tr>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            Navn
+                        </th>
+                        <th>
+                            Beskrivelse
+                        </th>
+                        <th>
+                            Planlagt start
+                        </th>
+                        <th>
+                            Planlagt slutt
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Project.ProjectCycles)
+                    {
+                    <tr>
+                        <td>
+                            @item.CycleNumber
+                        </td>
+                        <td>
+                            @item.CycleName
+                        </td>
+                        <td>
+                            @item.CycleDescription
+                        </td>
+                        <td>
+                            @item.CyclePlannedStart
+                        </td>
+                        <td>
+                            @item.CyclePlannedEnd
+                        </td>
+                        @if (item.CycleActive)
+                        {
+                            <td>
+                                Åpen
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                Stengt
+                            </td>
+                        }
+                        <td>
+                            @Html.ActionLink("Detaljer", "ViewProjectCycle", new { id = item.Unique_CycleIdString })
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
 
+        </div>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <h4 class="text-center">Kommentarer til dette prosjektet</h4>
 
+    </div>
 </div>
 
-<div id="PC-C">
-
-
-</div>
 
 
 <div>

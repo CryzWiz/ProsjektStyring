@@ -31,6 +31,7 @@ namespace ProsjektStyring.Models.Repositorys
                 CycleName = "Mine Oppgaver",
                 CycleRegistered = DateTime.Now,
                 Unique_CycleIdString = getGuid(),
+                CycleNumber = 1,
                 CyclePlannedStart = project.ProjectPlannedStart,
                 CyclePlannedEnd = project.ProjectPlannedEnd,
                 CycleDescription = "Du kan opprette alle oppgaver under denne syklusen, eller du kan lage flere sykluser. Hver syklus kan ha mange arbeidsoppgaver."

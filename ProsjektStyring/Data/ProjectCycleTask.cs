@@ -31,9 +31,14 @@ namespace ProsjektStyring.Data
         public double TotalHoursSpent { get; set; }
         public int ProsentageDone { get; set; }
 
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime TaskRegistered { get; set; }
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime TaskDueDate { get; set; }
-
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime TaskCleared { get; set; }
         public string TaskClearedByUser { get; set; }
 

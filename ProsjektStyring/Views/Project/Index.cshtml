@@ -12,10 +12,14 @@
 
 @if (Model.UnActivatedProjects.Count > 0)
 {
-    <table class="table">
+    <h4 class="text-center">Ikke påbegynte prosjekter</h4>
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th>Prosjekt</th>
+                <th>Opprettet</th>
+                <th>Starter</th>
+                <th>Slutter</th>
                 <th>Alternativer</th>
             </tr>
         </thead>
@@ -24,6 +28,9 @@
             {
                 <tr>
                     <td>@item.ProjectName</td>
+                    <td>@item.ProjectRegistered</td>
+                    <td>@item.ProjectPlannedStart</td>
+                    <td>@item.ProjectPlannedEnd</td>
                     <td>
                         @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }) |
                         @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }) |
@@ -39,24 +46,31 @@
 
 @if (Model.ActiveProjects.Count > 0)
 {
+    <h4 class="text-center">Aktive Prosjekter</h4>
     <table class="table">
         <thead>
             <tr>
                 <th>Prosjekt</th>
+                <th>Opprettet</th>
+                <th>Starter</th>
+                <th>Slutter</th>
                 <th>Alternativer</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.ActiveProjects)
             {
-            <tr>
-                <td>@item.ProjectName</td>
-                <td>
-                    @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }) |
-                    @Html.ActionLink("Slett", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
-            </tr>
+                <tr>
+                    <td>@item.ProjectName</td>
+                    <td>@item.ProjectRegistered</td>
+                    <td>@item.ProjectPlannedStart</td>
+                    <td>@item.ProjectPlannedEnd</td>
+                    <td>
+                        @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }) |
+                        @Html.ActionLink("Slett", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -65,29 +79,36 @@
 }
 @if (Model.CompletedProjects.Count > 0)
 {
+    <h4 class="text-center">Ferdigstilte Prosjekter</h4>
     <table class="table">
         <thead>
             <tr>
                 <th>Prosjekt</th>
+                <th>Opprettet</th>
+                <th>Starter</th>
+                <th>Slutter</th>
                 <th>Alternativer</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.CompletedProjects)
             {
-            <tr>
-                <td>@item.ProjectName</td>
-                <td>
-                    @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }) |
-                    @Html.ActionLink("Slett", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
-            </tr>
+                <tr>
+                    <td>@item.ProjectName</td>
+                    <td>@item.ProjectRegistered</td>
+                    <td>@item.ProjectPlannedStart</td>
+                    <td>@item.ProjectPlannedEnd</td>
+                    <td>
+                        @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }) |
+                        @Html.ActionLink("Slett", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 }
-@if(Model.UnActivatedProjects.Count == 0 && Model.CompletedProjects.Count == 0 && Model.ActiveProjects.Count == 0)
+@if (Model.UnActivatedProjects.Count == 0 && Model.CompletedProjects.Count == 0 && Model.ActiveProjects.Count == 0)
 {
     <h4 style="color:red;">Ingen prosjekter funnet!</h4>
 }
