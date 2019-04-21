@@ -1,31 +1,98 @@
-﻿
-function getHourStats(id) {
+﻿// Tests
+function TestApi() {
     var request = new XMLHttpRequest();
-    request.open('GET', '../GetLogForLastHourAsync/' + id, true);
+    request.open('GET', '../api/Project/TestAPI/', true);
 
     request.onload = function () {
         if (request.status >= 200 && request.status < 400) {
             // Success!
             var data = JSON.parse(request.responseText);
-
-            TempH = new Array(); HumH = new Array(); UpdH = new Array();
-            for (i = 0; i < data.length; i++) {
-                TempH.push(data[i].temperature);
-                HumH.push(data[i].humidity);
-                var b = data[i].update_time.split("T");
-                var t = b[1].split(".");
-                UpdH.push(t[0]);
-            }
-            console.log(data.hour);
-            draw_hourlyGraph(TempH, HumH, UpdH);
+            console.log(data);
         } else {
             // We reached our target server, but it returned an error
-
+            console.log("damn!We didnt get a successfull result...");
         }
     };
 
     request.onerror = function () {
         // There was a connection error of some sort
+        console.log("connection error in TestApi()!");
+    };
+
+    request.send();
+}
+
+
+
+// Helpers
+function addCycle() {
+    var user = document.getElementById("NCreatedBy").value;
+    var cname = document.getElementById("NCycleName").value;
+    var cdescription = document.getElementById("NCycleDescription").value;
+    var sd = document.getElementById("NPStart").value;
+    var ed = document.getElementById("NPSlutt").value;
+    var pid = document.getElementById("NProjectId").value;
+    AddProjectCycle(user, pid, cname, cdescription, sd, ed);
+}
+
+
+
+
+// API-calls
+function AddProjectCycle(u, pid, cn, cd, sd, ed) {
+    var request = new XMLHttpRequest();
+    var data = { pid : pid, user : u, cname : cn, cdescription : cd, startdate : sd, enddate : ed};
+    request.open('POST', '../api/Project/AddProjectCycle/', true);
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.send(data);
+    request.onreadystatechange = function () { // Call a function when the state changes.
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            // Request finished. Do processing here.
+            var res = JSON.parse(request.responseText);
+            console.log(res);
+        }
+    };
+    
+    //request.onload = function () {
+    //    if (request.status >= 200 && request.status < 400) {
+    //        // Success!
+    //        var data = JSON.parse(request.responseText);
+    //        console.log(data);
+
+
+    //    } else {
+    //        // We reached our target server, but it returned an error
+    //        console.log("damn!We didnt get a successfull result...");
+    //    }
+    //};
+
+    request.onerror = function () {
+        // There was a connection error of some sort
+        console.log("connection error in TestApi()!");
+    };
+
+
+}
+function AddProjectComment() {
+    var request = new XMLHttpRequest();
+    request.open('GET', '../api/Project/AddProjectComment/', true);
+
+    request.onload = function () {
+        if (request.status >= 200 && request.status < 400) {
+            // Success!
+            var data = JSON.parse(request.responseText);
+            console.log(data);
+
+
+        } else {
+            // We reached our target server, but it returned an error
+            console.log("damn!We didnt get a successfull result...");
+        }
+    };
+
+    request.onerror = function () {
+        // There was a connection error of some sort
+        console.log("connection error in TestApi()!");
     };
 
     request.send();
