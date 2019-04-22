@@ -5,9 +5,10 @@ Code is in english, but all front-end language is in norwegian. Build in asp.net
 ### Current information available:  ###
 
 Users:
+
 Admin: username: admin@admin.com  Password: Password@123
 
-##Idea:
+##  Idea:
 Projects can have many projectcycles, and projectcycles can have many tasks. Think Sprints.
 Every cycle have a planned start and end date. Every task have a planned start and end date. So does the project.
 
@@ -19,9 +20,9 @@ Every task should track spent time vs planned time, and a proximity for % done b
 Every cycle should track spent time vs planned time, and a estimated time based on completion.
 Evvery project should track spent time vs planned time, and estimated time to completion.
 
-##Currents status:
+##  Currents status:
 Still implementing Projects, projectcycles, projectcyclestasks, and projectcomments, projectcyclecomments and projectcycletaskcomments and
 all corresponding functions (add, edit, create, delete).
 
-##Future upgrade:
+##  Future upgrade:
 API service for android-app access.
