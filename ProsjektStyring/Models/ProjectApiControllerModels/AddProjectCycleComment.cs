@@ -7,7 +7,7 @@ namespace ProsjektStyring.Models.ProjectApiControllerModels
 {
     public class AddProjectCycleComment
     {
-        public string projectId { get; set; }
+        public string projectCycleId { get; set; }
         public string user { get; set; }
         public string commentHeading { get; set; }
         public string comment { get; set; }

@@ -28,7 +28,8 @@ namespace ProsjektStyring.Controllers
         // ProjectCycle supporters
         [HttpPost("AddProjectCycle")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
-        public async Task<IActionResult> AddProjectCycle([FromBody][Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")] AddProjectCycle projectCycle)
+        public async Task<IActionResult> AddProjectCycle([FromBody]
+        [Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")] AddProjectCycle projectCycle)
         {
             if (ModelState.IsValid)
             {
@@ -59,9 +60,10 @@ namespace ProsjektStyring.Controllers
 
 
         // ProjectTask
-        [HttpPost("AddProjectCycle")]
+        [HttpPost("AddProjectCycleTask")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
-        public async Task<IActionResult> AddProjectCycleTask([FromBody][Bind("projectCycleId", "user", "cycleTaskName", "cycleTaskDescription", "plannedHours", "dueDate")] AddProjectCycleTask cT)
+        public async Task<IActionResult> AddProjectCycleTask([FromBody]
+        [Bind("projectCycleId", "user", "cycleTaskName", "cycleTaskDescription", "plannedHours", "dueDate")] AddProjectCycleTask cT)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +71,19 @@ namespace ProsjektStyring.Controllers
 
                 if (pT != null)
                 {
-                    return Ok(pT);
+                    ProjectCycleTask c = new ProjectCycleTask
+                    {
+                        TaskActive = pT.TaskActive,
+                        TaskDescription = pT.TaskDescription,
+                        TaskName = pT.TaskName,
+                        PlannedHours = pT.PlannedHours,
+                        TaskCompleted = pT.TaskCompleted,
+                        TotalHoursSpent = pT.TotalHoursSpent,
+                        TaskRegistered = pT.TaskRegistered,
+                        TaskDueDate = pT.TaskDueDate,
+                        Unique_TaskIdString = pT.Unique_TaskIdString
+                    };
+                    return Ok(c);
                 }
                 else return Ok("error");
             }
@@ -83,11 +97,12 @@ namespace ProsjektStyring.Controllers
         // Comments
         [HttpPost("AddProjectComment")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
-        public async Task<IActionResult> AddProjectCycleComment([FromBody]AddProjectCycleComment projectCycleComment)
+        public async Task<IActionResult> AddProjectComment([FromBody]
+        [Bind("projectId", "user", "CommentHeading", "comment")]AddProjectComment projectComment)
         {
             if (ModelState.IsValid)
             {
-                ProjectCycleComment pC = await _projectRepository.AddProjectCycleCommentAsync(projectCycleComment);
+                ProjectComment pC = await _projectRepository.AddProjectCommentAsync(projectComment);
                 if (pC != null)
                 {
                     return Ok(pC);
@@ -104,13 +119,14 @@ namespace ProsjektStyring.Controllers
 
         }
 
-        [HttpPost("AddProjectComment")]
+        [HttpPost("AddProjectCycleComment")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
-        public async Task<IActionResult> AddProjectComment([FromBody]AddProjectComment projectComment)
+        public async Task<IActionResult> AddProjectCycleComment([FromBody]
+        [Bind("projectCycleId", "user", "commentHeading", "comment")]AddProjectCycleComment projectCycleComment)
         {
             if (ModelState.IsValid)
             {
-                ProjectComment pC = await _projectRepository.AddProjectCommentAsync(projectComment);
+                ProjectCycleComment pC = await _projectRepository.AddProjectCycleCommentAsync(projectCycleComment);
                 if (pC != null)
                 {
                     return Ok(pC);

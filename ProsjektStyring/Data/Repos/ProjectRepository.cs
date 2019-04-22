@@ -52,38 +52,43 @@ namespace ProsjektStyring.Models.Repositorys
             else return null;
         }
 
+        // Getters for Project by status
         public async Task<List<Project>> GetActiveProjectsAsync()
         {
             var projects = await Task.Run(() => _db.Project.Where(x => x.ProjectActive == true).ToList());
             return projects;
         }
-
         public async Task<List<Project>> GetUnActivatedProjectsAsync()
         {
             var projects = await Task.Run(() => _db.Project.Where(x => x.ProjectActive == false && x.ProjectCompleted == false).ToList());
             return projects;
         }
-
         public async Task<List<Project>> GetCompletedProjectsAsync()
         {
             var projects = await Task.Run(() => _db.Project.Where(x => x.ProjectCompleted == true).ToList());
             return projects;
         }
 
+        // Getters for Project, ProjectCycle and ProjectCycleTask by unique id string
         public async Task<Project> GetProjectByUniqueId(string id)
         {
             var project = await Task.Run(() => _db.Project.Include("ProjectCycles").Include("ProjectComments").FirstOrDefault(x => x.Unique_ProjectIdString == id));
             return project;
         }
-
         public async Task<ProjectCycle> GetProjectCycleByUniqueId(string id)
         {
-            var cycle = await Task.Run(() => _db.ProjectCycle.FirstOrDefault(x => x.Unique_CycleIdString == id));
+            var cycle = await _db.ProjectCycle.Include("ProjectCycleTasks").Include("ProjectCycleComments").FirstOrDefaultAsync(x => x.Unique_CycleIdString == id);
             var p = await _db.Project.FirstOrDefaultAsync(x => x.ProjectId == cycle.ProjectId);
             cycle.Project = p;
             return cycle;
         }
+        public async Task<ProjectCycleTask> GetProjectCycleTaskByUniqueId(string id)
+        {
+            ProjectCycleTask task = await _db.ProjectCycleTask.FirstOrDefaultAsync(x => x.Unique_TaskIdString == id);
+            return task;
+        }
 
+        // Adders for Project, ProjectCycle and ProjectCycleTask
         public async Task<ProjectCycle> AddCycleToProjectAsync(AddProjectCycle pC)
         {
             Project p = await GetProjectByUniqueId(pC.projectId);
@@ -112,10 +117,37 @@ namespace ProsjektStyring.Models.Repositorys
                 return null;
             }
         }
+        public async Task<ProjectCycleTask> AddTaskToCycleAsync(AddProjectCycleTask cT)
+        {
 
+            ProjectCycleTask t = new ProjectCycleTask { };
+            t.ProjectCycleId = await getProjectCycleId(cT.projectCycleId);
+            t.TaskActive = false;
+            t.TaskDescription = cT.cycleTaskDescription;
+            t.TaskName = cT.cycleTaskName;
+            t.PlannedHours = cT.plannedHours;
+            t.TaskCompleted = false;
+            t.TotalHoursSpent = 0.0;
+            t.TaskRegistered = DateTime.Now;
+            t.TaskDueDate = cT.dueDate;
+            t.Unique_TaskIdString = getGuid();
+
+            _db.Add(t);
+            if (await _db.SaveChangesAsync() > 0)
+            {
+                ProjectCycleTask newTaske = await GetProjectCycleTaskByUniqueId(t.Unique_TaskIdString);
+                return newTaske;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        // Comments controlls
         public async Task<ProjectComment> AddProjectCommentAsync(AddProjectComment pC)
         {
-            
+
             ProjectComment comment = new ProjectComment
             {
                 CommentRegistered = DateTime.Now,
@@ -133,16 +165,27 @@ namespace ProsjektStyring.Models.Repositorys
             }
             else return null;
         }
-
-        public Task<ProjectCycleComment> AddProjectCycleCommentAsync(AddProjectCycleComment pC)
+        public async Task<ProjectCycleComment> AddProjectCycleCommentAsync(AddProjectCycleComment pC)
         {
-            throw new NotImplementedException();
+            ProjectCycleComment comment = new ProjectCycleComment
+            {
+                CommentRegistered = DateTime.Now,
+                ByUser = pC.user,
+                Comment = pC.comment,
+                CommentHeading = pC.commentHeading,
+                ProjectCycleId = await getProjectCycleId(pC.projectCycleId),
+                Unique_IdString = getGuid()
+            };
+            _db.Add(comment);
+            if (await _db.SaveChangesAsync() > 0)
+            {
+                var c = await _db.ProjectCycleComment.FirstOrDefaultAsync(x => x.Unique_IdString == comment.Unique_IdString);
+                return c;
+            }
+            else return null;
         }
 
-        public Task<ProjectCycleTask> AddTaskToCycleAsync(AddProjectCycleTask cT)
-        {
-            throw new NotImplementedException();
-        }
+
 
         /// Helpers
         /// 
@@ -162,6 +205,12 @@ namespace ProsjektStyring.Models.Repositorys
         {
             var p = await _db.Project.FirstOrDefaultAsync(x => x.Unique_ProjectIdString == uniqueId);
             return p.ProjectId;
+        }
+
+        private async Task<int> getProjectCycleId(string uniqueId)
+        {
+            var c = await _db.ProjectCycle.FirstOrDefaultAsync(x => x.Unique_CycleIdString == uniqueId);
+            return c.ProjectCycleId;
         }
 
        

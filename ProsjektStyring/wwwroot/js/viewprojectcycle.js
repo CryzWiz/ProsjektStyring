@@ -3,10 +3,11 @@ function addCycleTask() {
     var tn = document.getElementById("newTaskName").value;
     var td = document.getElementById("newTaskDescription").value;
     var tp = document.getElementById("newTaskPlannedHours").value;
+    var ttp = tp.replace(".", ",");
     var tdue = document.getElementById("newTaskDueDate").value;
     var user = document.getElementById("newTaskCreatedBy").value;
     var pid = document.getElementById("newTaskProjectCycleId").value;
-    AddProjectCycleTask(user, pid, tn, td, tp, tdue);
+    AddProjectCycleTask(user, pid, tn, td, ttp, tdue);
 }
 
 function addComment() {
@@ -14,7 +15,7 @@ function addComment() {
     var ch = document.getElementById("CommentHeadline").value;
     var ct = document.getElementById("CommentText").value;
     var pid = document.getElementById("CProjectCycleId").value;
-    AddProjectComment(user, pid, ch, ct);
+    AddProjectCycleComment(user, pid, ch, ct);
 }
 
 
@@ -26,12 +27,12 @@ function AddProjectCycleTask(u, pid, tn, td, tp, tdue) {
     var data = {
         "projectCycleId": pid,
         "user": u,
-        "cycleTTaskName": tn,
+        "cycleTaskName": tn,
         "cycleTaskDescription": td,
         "plannedHours": tp,
         "dueDate": tdue
     };
-    request.open('POST', '../api/Project/AddProjectCycleTask/', true);
+    request.open('POST', '../../api/Project/AddProjectCycleTask/', true);
     request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
     request.send(JSON.stringify(data));
     request.onreadystatechange = function () {
@@ -49,7 +50,7 @@ function AddProjectCycleTask(u, pid, tn, td, tp, tdue) {
             // create node for all the new cells
             var tName = document.createTextNode(res.taskName);
             var tDesc = document.createTextNode(res.taskDescription);
-            var tDue = document.createTextNode(res.taskDusedDate);
+            var tDue = document.createTextNode(res.taskDueDate);
             var a = res.taskCompleted ? "Åpen" : "Stengt";
             var tStat = document.createTextNode(a);
             var link = document.createElement('a');
@@ -74,7 +75,7 @@ function AddProjectCycleTask(u, pid, tn, td, tp, tdue) {
         console.log("connection error in TestApi()!");
     };
 }
-function AddProjectComment(u, pid, ch, ct) {
+function AddProjectCycleComment(u, pid, ch, ct) {
     var request = new XMLHttpRequest();
     var data = {
         "projectCycleId": pid,
@@ -83,7 +84,7 @@ function AddProjectComment(u, pid, ch, ct) {
         "comment": ct
     };
 
-    request.open('POST', '../api/Project/AddProjectCycleComment/', true);
+    request.open('POST', '../../api/Project/AddProjectCycleComment/', true);
     request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
     request.send(JSON.stringify(data));
 
