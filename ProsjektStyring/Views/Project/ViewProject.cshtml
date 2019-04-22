@@ -7,6 +7,7 @@
 <div>
     <h4 class="text-center">Oversikt for @Model.Project.ProjectName</h4>
     <hr />
+    @* Project details *@
     <div class="row">
         <div class="container">
             <div class="row">
@@ -14,23 +15,20 @@
                     <dl>
                         <dd><b>Prosjekt for:</b></dd>
                         <dd><b>Beskrivelse:</b></dd>
-                        <dd><b>Planlagt start:</b></dd>
-                        <dd><b>Planlagt slutt:</b></dd>
                     </dl>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-3">
                     <dl>
                         <dd>@Model.Project.ProjectClient</dd>
                         <dd>@Model.Project.ProjectDescription</dd>
-                        <dd>@Model.Project.ProjectPlannedStart</dd>
-                        <dd>@Model.Project.ProjectPlannedEnd</dd>
-
                     </dl>
                 </div>
                 <div class="col-lg-1 col-md-1 col-sm-1"></div>
                 <div class="col-lg-2 col-md-2 col-sm-2">
                     <dl>
                         <dd><b>Status:</b></dd>
+                        <dd><b>Planlagt start:</b></dd>
+                        <dd><b>Planlagt slutt:</b></dd>
 
                     </dl>
                 </div>
@@ -48,6 +46,8 @@
                         {
                             <dd><span style="color:red">Ikke aktiv</span></dd>
                         }
+                        <dd>@Model.Project.ProjectPlannedStart</dd>
+                        <dd>@Model.Project.ProjectPlannedEnd</dd>
                     </dl>
                 </div>
             </div>
@@ -55,6 +55,7 @@
     </div>
 </div>
 <hr />
+@* ProjectCycles details *@
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div id="PC-C">
@@ -86,49 +87,92 @@
                 <tbody>
                     @foreach (var item in Model.Project.ProjectCycles)
                     {
-                    <tr>
-                        <td>
-                            @item.CycleNumber
-                        </td>
-                        <td>
-                            @item.CycleName
-                        </td>
-                        <td>
-                            @item.CycleDescription
-                        </td>
-                        <td>
-                            @item.CyclePlannedStart
-                        </td>
-                        <td>
-                            @item.CyclePlannedEnd
-                        </td>
-                        @if (item.CycleActive)
-                        {
+                        <tr>
                             <td>
-                                Åpen
+                                @item.CycleNumber
                             </td>
-                        }
-                        else
-                        {
                             <td>
-                                Stengt
+                                @item.CycleName
                             </td>
-                        }
-                        <td>
-                            @Html.ActionLink("Detaljer", "ViewProjectCycle", new { id = item.Unique_CycleIdString })
-                        </td>
-                    </tr>
+                            <td>
+                                @item.CycleDescription
+                            </td>
+                            <td>
+                                @item.CyclePlannedStart
+                            </td>
+                            <td>
+                                @item.CyclePlannedEnd
+                            </td>
+                            @if (item.CycleActive)
+                            {
+                                <td>
+                                    Åpen
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    Stengt
+                                </td>
+                            }
+                                <td>
+                                    @Html.ActionLink("Detaljer", "ViewProjectCycle", new { id = item.Unique_CycleIdString })
+                                </td>
+                        </tr>
                     }
                 </tbody>
             </table>
+            <div class="col-lg-2 col-md-2 col-sm-2 offset-10">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCycleModal">
+                    Legg til flere sykluser
+                </button>
+            </div>
+            <div class="modal fade" id="addCycleModal" tabindex="-1" role="dialog" aria-labelledby="addCycleModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Legg til ny syklus</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @using Microsoft.AspNetCore.Identity
+                            @inject SignInManager<ProsjektStyring.Data.ApplicationUser> SignInManager
+                            @inject UserManager<ProsjektStyring.Data.ApplicationUser> UserManager
+                            <label>Syklus navn:</label>
+                            <input class="form-control" placeholder="Syklus navn" id="NCycleName" />
+                            <label>Beskrivelse:</label>
+                            <input class="form-control" placeholder="Beskrivelse" id="NCycleDescription" />
+                            <label>Planlagt start:</label>
+                            <input class="form-control" id="NPStart" type="date"/>
+                            <label>Planlagt slutt:</label>
+                            <input class="form-control" id="NPSlutt" type="date"/>
+
+                            <hr />
+                            <label>Opprettet av:</label>
+                            <input class="form-control" value="@User.Identity.Name" id="NCreatedBy"disabled/>
+                            <label>Prosjekt-Id:</label>
+                            <input class="form-control" value="@Model.Project.Unique_ProjectIdString" id="NProjectId" disabled />
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+                            <button type="button" class="btn btn-primary" onclick="addCycle()" data-dismiss="modal">Legg til</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
 </div>
 <hr />
+@* ProjectComments *@
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <h4 class="text-center">Kommentarer til dette prosjektet</h4>
+        <button onclick="TestApi()">Test me!</button>
 
     </div>
 </div>
@@ -136,7 +180,7 @@
 
 
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Endre prosjektdetaljer", "Edit", new { id = Model.Project.Unique_ProjectIdString }) |
     <a asp-action="Index">Tilbake til oversikten</a>
 </div>
 
