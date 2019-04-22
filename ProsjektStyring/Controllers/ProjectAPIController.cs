@@ -61,7 +61,7 @@ namespace ProsjektStyring.Controllers
         // ProjectTask
         [HttpPost("AddProjectCycle")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
-        public async Task<IActionResult> AddProjectCycleTask([FromBody][Bind("projectCycleId", "user", "cycleTTaskName", "cycleTaskDescription", "plannedHours", "dueDate")] AddProjectCycleTask cT)
+        public async Task<IActionResult> AddProjectCycleTask([FromBody][Bind("projectCycleId", "user", "cycleTaskName", "cycleTaskDescription", "plannedHours", "dueDate")] AddProjectCycleTask cT)
         {
             if (ModelState.IsValid)
             {
