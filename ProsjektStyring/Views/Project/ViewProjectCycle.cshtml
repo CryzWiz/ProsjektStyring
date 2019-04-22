@@ -1,4 +1,7 @@
 ﻿@model ProsjektStyring.Models.ProjectControllerModels.ViewProjectCycleViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ProsjektStyring.Data.ApplicationUser> SignInManager
+@inject UserManager<ProsjektStyring.Data.ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = Model.ProjectCycle.Project.ProjectName + " - " + Model.ProjectCycle.CycleName;
@@ -41,8 +44,107 @@
 
 @* ProjectCycleTask details *@
 <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="container">
         <h4 class="text-center">Oppgaver for denne syklusen</h4>
+
+        <div id="PC-C">
+            @if (Model.ProjectCycle.ProjectCycleTasks != null)
+            {
+                <table class="table table-hover" id="CT">
+                    <thead>
+                        <tr>
+                            <th>
+                                Navn
+                            </th>
+                            <th>
+                                Beskrivelse
+                            </th>
+                            <th>
+                                Frist
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ProjectCycle.ProjectCycleTasks)
+                        {
+                            <tr>
+                                <td>
+                                    @item.TaskName
+                                </td>
+                                <td>
+                                    @item.TaskDescription
+                                </td>
+                                <td>
+                                    @item.TaskDueDate
+                                </td>
+                                @if (item.TaskCompleted)
+                                {
+                                    <td>
+                                        Fullført
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        Ikke fullført
+                                    </td>
+                                }
+                                <td>
+                                    @Html.ActionLink("Detaljer", "ViewProjectCycleTask", new { id = item.Unique_TaskIdString })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <h5 class="text-center">Ingen oppgaver funnet!</h5>
+            }
+
+            <div class="col-lg-2 col-md-2 col-sm-2 offset-10">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCycleTaskModal">
+                    Legg til flere oppgaver
+                </button>
+            </div>
+            <div class="modal fade" id="addCycleTaskModal" tabindex="-1" role="dialog" aria-labelledby="addCycleTaskModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Legg til ny Oppgave</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <label>Oppgave:</label>
+                            <input class="form-control" placeholder="Beskrivende navn" id="newTaskName" />
+                            <label>Beskrivelse:</label>
+                            <input class="form-control" placeholder="Beskrivelse" id="newTaskDescription" />
+                            <label>Planlagt tidsforbruk:</label>
+                            <input class="form-control" placeholder="Antall timer, men du kan bruke desimaler for minutt" id="newTaskPlannedHours"/>
+                            <label>Frist:</label>
+                            <input class="form-control" id="newTaskDueDate" type="date"/>
+
+                            <hr />
+                            <label>Opprettet av:</label>
+                            <input class="form-control" value="@User.Identity.Name" id="newTaskCreatedBy" disabled />
+                            <label>Prosjekt-Id:</label>
+                            <input class="form-control" value="@Model.ProjectCycle.Unique_CycleIdString" id="newTaskProjectCycleId" disabled />
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+                            <button type="button" class="btn btn-primary" onclick="addCycleTask()" data-dismiss="modal">Legg til</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -50,11 +152,71 @@
 
 @* ProjectCycleComments *@
 <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="container">
         <h4 class="text-center">Kommentarer til denne syklusen</h4>
+
+        <div class="col-lg-12 col-md-12 col-sm-12" id="pComments">
+            @if (Model.ProjectCycle.ProjectCycleComments != null)
+            {
+                foreach (var item in Model.ProjectCycle.ProjectCycleComments)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.CommentHeading</h5>
+                            <p class="card-text">@item.Comment</p>
+                            <p class="card-text"><small class="text-muted">@item.CommentRegistered - @item.ByUser</small></p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <h5 class="text-center">Ingen kommentarer registrert!</h5>
+            }
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2 offset-10">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCommentModal">
+                Legg til ny kommentar
+            </button>
+        </div>
+        <div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="addCommentModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Legg til en ny kommentar</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label>Overskrift:</label>
+                        <input class="form-control" placeholder="Din overskrift" id="CommentHeadline" />
+                        <label>Kommentar:</label>
+                        <textarea class="form-control" id="CommentText" rows="3" placeholder="Din kommentar..."></textarea>
+
+                        <hr />
+                        <label>Opprettet av:</label>
+                        <input class="form-control" value="@User.Identity.Name" id="CommentMadeBy" disabled />
+                        <input class="form-control" value="@Model.ProjectCycle.Unique_CycleIdString" id="CProjectCycleId" hidden />
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+                        <button type="button" class="btn btn-primary" onclick="addComment()" data-dismiss="modal">Legg til</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 
 <div>
     @Html.ActionLink("Tilbake til " + Model.ProjectCycle.Project.ProjectName, "ViewProject", new { id = Model.ProjectCycle.Project.Unique_ProjectIdString })
 </div>
+
+
+@section Scripts {
+    <script src="~/js/viewprojectcycle.js"></script>
+}
