@@ -52,11 +52,12 @@ function AddProjectCycle(u, pid, cn, cd, sd, ed) {
     request.open('POST', '../api/Project/AddProjectCycle/', true);
     request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
     request.send(JSON.stringify(data));
-    request.onreadystatechange = function () { // Call a function when the state changes.
+    request.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             // Request finished. Do processing here.
             var res = JSON.parse(request.responseText);
             console.log("AddProjectCycle: " + request.responseText);
+            // Lets insert the new cycle to our cycletable
             // create a new row
             var table = document.getElementById("CT");
             var row = table.insertRow(res.cycleNumber);
@@ -82,8 +83,12 @@ function AddProjectCycle(u, pid, cn, cd, sd, ed) {
             cell3.appendChild(cDesc); cell4.appendChild(cSd);
             cell5.appendChild(cEd); cell6.appendChild(cA);
             cell7.appendChild(link);
-            
 
+
+        }
+        else {
+            // We reached our target server, but it returned an error
+            console.log("damn!We didnt get a successfull result from AddProjectCycle()...");
         }
     };
     request.onerror = function () {
@@ -94,7 +99,6 @@ function AddProjectCycle(u, pid, cn, cd, sd, ed) {
 function AddProjectComment() {
     var request = new XMLHttpRequest();
     request.open('GET', '../api/Project/AddProjectComment/', true);
-
     request.onload = function () {
         if (request.status >= 200 && request.status < 400) {
             // Success!
@@ -102,12 +106,12 @@ function AddProjectComment() {
             console.log(data);
 
 
-        } else {
+        }
+        else {
             // We reached our target server, but it returned an error
-            console.log("damn!We didnt get a successfull result...");
+            console.log("damn!We didnt get a successfull result from AddProjectComment()...");
         }
     };
-
     request.onerror = function () {
         // There was a connection error of some sort
         console.log("connection error in TestApi()!");
