@@ -10,6 +10,7 @@ namespace ProsjektStyring.Models.IRepositorys
     public interface IProjectRepository
     {
         Task<Project> GetProjectByUniqueId(string id);
+        Task<ProjectCycle> GetProjectCycleByUniqueId(string id);
         Task<List<Project>> GetUnActivatedProjectsAsync();
         Task<List<Project>> GetActiveProjectsAsync();
         Task<List<Project>> GetCompletedProjectsAsync();

@@ -1,0 +1,60 @@
+﻿@model ProsjektStyring.Models.ProjectControllerModels.ViewProjectCycleViewModel
+
+@{
+    ViewData["Title"] = Model.ProjectCycle.Project.ProjectName + " - " + Model.ProjectCycle.CycleName;
+}
+
+@* ProjectCycle details *@
+<div class="row">
+    <div class="container">
+        <h4 class="text-center">@Model.ProjectCycle.Project.ProjectName - @Model.ProjectCycle.CycleName</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">Syklusnavn: </dt>
+            <dd class="col-sm-4">@Model.ProjectCycle.CycleName</dd>
+
+            <dt class="col-sm-2">Aktiv: </dt>
+            <dd class="col-sm-4">@Model.ProjectCycle.CycleActive</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Syklus nummer: </dt>
+            <dd class="col-sm-4">@Model.ProjectCycle.CycleNumber</dd>
+
+            <dt class="col-sm-2">Registrert:</dt>
+            <dd class="col-sm-4">@Model.ProjectCycle.CycleRegistered</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Planlagt start:</dt>
+            <dd class="col-sm-4">@Model.ProjectCycle.CyclePlannedStart</dd>
+
+            <dt class="col-sm-2">Planlagt slutt:</dt>
+            <dd class="col-sm-4">@Model.ProjectCycle.CyclePlannedEnd</dd>
+        </dl>
+        <dl class="=row">
+            <dt class="col-sm-3">Beskrivelse:</dt>
+            <dd class="col-sm-9">@Model.ProjectCycle.CycleDescription</dd>
+        </dl>
+    </div>
+</div>
+
+<hr />
+
+@* ProjectCycleTask details *@
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <h4 class="text-center">Oppgaver for denne syklusen</h4>
+    </div>
+</div>
+
+<hr />
+
+@* ProjectCycleComments *@
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <h4 class="text-center">Kommentarer til denne syklusen</h4>
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Tilbake til " + Model.ProjectCycle.Project.ProjectName, "ViewProject", new { id = Model.ProjectCycle.Project.Unique_ProjectIdString })
+</div>

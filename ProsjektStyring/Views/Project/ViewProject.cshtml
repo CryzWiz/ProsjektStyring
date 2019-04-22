@@ -1,63 +1,50 @@
 ﻿@model ProsjektStyring.Models.ProjectControllerModels.ViewProjectViewModel
 
 @{
-    ViewData["Title"] = @Model.Project.ProjectName;
+    ViewData["Title"] = Model.Project.ProjectName;
 }
 
-<div>
-    <h4 class="text-center">Oversikt for @Model.Project.ProjectName</h4>
-    <hr />
-    @* Project details *@
-    <div class="row">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-2">
-                    <dl>
-                        <dd><b>Prosjekt for:</b></dd>
-                        <dd><b>Beskrivelse:</b></dd>
-                    </dl>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <dl>
-                        <dd>@Model.Project.ProjectClient</dd>
-                        <dd>@Model.Project.ProjectDescription</dd>
-                    </dl>
-                </div>
-                <div class="col-lg-1 col-md-1 col-sm-1"></div>
-                <div class="col-lg-2 col-md-2 col-sm-2">
-                    <dl>
-                        <dd><b>Status:</b></dd>
-                        <dd><b>Planlagt start:</b></dd>
-                        <dd><b>Planlagt slutt:</b></dd>
+@* Project details *@
+<div class="row">
+    <div class="container">
+        <h4 class="text-center">@Model.Project.ProjectName</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">Prosjekt for: </dt>
+            <dd class="col-sm-4">@Model.Project.ProjectClient</dd>
 
-                    </dl>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <dl>
-                        @if (Model.Project.ProjectActive)
-                        {
-                            <dd><span style="color:green">Aktiv</span></dd>
-                        }
-                        else if (!Model.Project.ProjectActive && Model.Project.ProjectCompleted)
-                        {
-                            <dd><span style="color:green">Prosjekt fullført!</span></dd>
-                        }
-                        else
-                        {
-                            <dd><span style="color:red">Ikke aktiv</span></dd>
-                        }
-                        <dd>@Model.Project.ProjectPlannedStart</dd>
-                        <dd>@Model.Project.ProjectPlannedEnd</dd>
-                    </dl>
-                </div>
-            </div>
-        </div>
+            <dt class="col-sm-2">Status: </dt>
+            @if (Model.Project.ProjectActive)
+            {
+                <dd class="col-sm-4"><span style="color:green">Aktiv</span></dd>
+            }
+            else if (!Model.Project.ProjectActive && Model.Project.ProjectCompleted)
+            {
+                <dd class="col-sm-4"><span style="color:green">Prosjekt fullført!</span></dd>
+            }
+            else
+            {
+                <dd class="col-sm-4"><span style="color:red">Ikke aktiv</span></dd>
+            }
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Planlagt start: </dt>
+            <dd class="col-sm-4">@Model.Project.ProjectPlannedStart</dd>
+
+            <dt class="col-sm-2">Planlagt slutt: </dt>
+            <dd class="col-sm-4">@Model.Project.ProjectPlannedEnd</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-3">Beskrivelse: </dt>
+            <dd class="col-sm-9">@Model.Project.ProjectDescription</dd>
+        </dl>
     </div>
 </div>
+
 <hr />
 @* ProjectCycles details *@
 <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="container">
         <div id="PC-C">
             <h4 class="text-center">Prosjekt-sykluser</h4>
             <table class="table table-hover" id="CT">
@@ -115,9 +102,9 @@
                                     Stengt
                                 </td>
                             }
-                                <td>
-                                    @Html.ActionLink("Detaljer", "ViewProjectCycle", new { id = item.Unique_CycleIdString })
-                                </td>
+                            <td>
+                                @Html.ActionLink("Detaljer", "ViewProjectCycle", new { id = item.Unique_CycleIdString })
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -145,13 +132,13 @@
                             <label>Beskrivelse:</label>
                             <input class="form-control" placeholder="Beskrivelse" id="NCycleDescription" />
                             <label>Planlagt start:</label>
-                            <input class="form-control" id="NPStart" type="date"/>
+                            <input class="form-control" id="NPStart" type="date" />
                             <label>Planlagt slutt:</label>
-                            <input class="form-control" id="NPSlutt" type="date"/>
+                            <input class="form-control" id="NPSlutt" type="date" />
 
                             <hr />
                             <label>Opprettet av:</label>
-                            <input class="form-control" value="@User.Identity.Name" id="NCreatedBy"disabled/>
+                            <input class="form-control" value="@User.Identity.Name" id="NCreatedBy" disabled />
                             <label>Prosjekt-Id:</label>
                             <input class="form-control" value="@Model.Project.Unique_ProjectIdString" id="NProjectId" disabled />
 
@@ -167,12 +154,12 @@
         </div>
     </div>
 </div>
+
 <hr />
 @* ProjectComments *@
 <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="container">
         <h4 class="text-center">Kommentarer til dette prosjektet</h4>
-        <button onclick="TestApi()">Test me!</button>
 
     </div>
 </div>
@@ -186,5 +173,5 @@
 
 
 @section Scripts {
-   <script src="~/js/viewproject.js"></script>
+    <script src="~/js/viewproject.js"></script>
 }

@@ -79,6 +79,8 @@ namespace ProsjektStyring.Models.Repositorys
         public async Task<ProjectCycle> GetProjectCycleByUniqueId(string id)
         {
             var cycle = await Task.Run(() => _db.ProjectCycle.FirstOrDefault(x => x.Unique_CycleIdString == id));
+            var p = await _db.Project.FirstOrDefaultAsync(x => x.ProjectId == cycle.ProjectId);
+            cycle.Project = p;
             return cycle;
         }
 
@@ -122,6 +124,9 @@ namespace ProsjektStyring.Models.Repositorys
             string GuidString = Convert.ToBase64String(g.ToByteArray());
             GuidString = GuidString.Replace("=", "");
             GuidString = GuidString.Replace("+", "");
+            GuidString = GuidString.Replace("/", "");
+            GuidString = GuidString.Replace("\\", "");
+            GuidString = GuidString.Replace("-", "");
             return GuidString;
         }
 
