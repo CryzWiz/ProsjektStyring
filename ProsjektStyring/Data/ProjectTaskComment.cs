@@ -17,7 +17,10 @@ namespace ProsjektStyring.Data
 
         public DateTime CommentRegistered { get; set; }
         public string ByUser { get; set; }
+        public string CommentHeading { get; set; }
         public string Comment { get; set; }
+
+        public string Unique_IdString { get; set; }
 
     }
 }

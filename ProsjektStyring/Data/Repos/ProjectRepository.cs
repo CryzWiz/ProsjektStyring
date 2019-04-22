@@ -113,7 +113,26 @@ namespace ProsjektStyring.Models.Repositorys
             }
         }
 
-
+        public async Task<ProjectComment> AddProjectCommentAsync(AddProjectComment pC)
+        {
+            
+            ProjectComment comment = new ProjectComment
+            {
+                CommentRegistered = DateTime.Now,
+                ByUser = pC.user,
+                Comment = pC.comment,
+                CommentHeading = pC.commentHeading,
+                ProjectId = await getProjectId(pC.projectId),
+                Unique_IdString = getGuid()
+            };
+            _db.Add(comment);
+            if (await _db.SaveChangesAsync() > 0)
+            {
+                var c = await _db.ProjectComment.FirstOrDefaultAsync(x => x.Unique_IdString == comment.Unique_IdString);
+                return c;
+            }
+            else return null;
+        }
 
 
         /// Helpers
@@ -128,6 +147,12 @@ namespace ProsjektStyring.Models.Repositorys
             GuidString = GuidString.Replace("\\", "");
             GuidString = GuidString.Replace("-", "");
             return GuidString;
+        }
+
+        private async Task<int> getProjectId(string uniqueId)
+        {
+            var p = await _db.Project.FirstOrDefaultAsync(x => x.Unique_ProjectIdString == uniqueId);
+            return p.ProjectId;
         }
 
     }

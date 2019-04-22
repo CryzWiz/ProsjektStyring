@@ -25,32 +25,26 @@ namespace ProsjektStyring.Controllers
             _userManager = uM;
         }
 
-        [HttpGet("TestAPI")]
-        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
-        public IActionResult TestApi()
-        {
-            return Ok("Teststring");
-        }
         // [Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")] 
         [HttpPost("AddProjectCycle")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
-        public async Task<IActionResult> AddProjectCycle([FromBody] AddProjectCycle projectCycle)
+        public async Task<IActionResult> AddProjectCycle([FromBody][Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")] AddProjectCycle projectCycle)
         {
             if (ModelState.IsValid)
             {
-                var result = await _projectRepository.AddCycleToProjectAsync(projectCycle);
+                ProjectCycle pC = await _projectRepository.AddCycleToProjectAsync(projectCycle);
 
-                if (result != null)
+                if (pC != null)
                 {
                     ProjectCycle c = new ProjectCycle
                     {
-                        CycleActive = result.CycleActive,
-                        CycleName = result.CycleName,
-                        CycleDescription = result.CycleDescription,
-                        CyclePlannedStart = result.CyclePlannedStart,
-                        CyclePlannedEnd = result.CyclePlannedEnd,
-                        Unique_CycleIdString = result.Unique_CycleIdString,
-                        CycleNumber = result.CycleNumber
+                        CycleActive = pC.CycleActive,
+                        CycleName = pC.CycleName,
+                        CycleDescription = pC.CycleDescription,
+                        CyclePlannedStart = pC.CyclePlannedStart,
+                        CyclePlannedEnd = pC.CyclePlannedEnd,
+                        Unique_CycleIdString = pC.Unique_CycleIdString,
+                        CycleNumber = pC.CycleNumber
                     };
                     return Ok(c);
                 }
@@ -63,11 +57,27 @@ namespace ProsjektStyring.Controllers
             
         }
 
-        [HttpGet("AddProjectComment")]
+        [HttpPost("AddProjectComment")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
-        public IActionResult AddProjectComment()
+        public async Task<IActionResult> AddProjectComment([FromBody]AddProjectComment projectComment)
         {
-            return Ok("Teststring");
+            if (ModelState.IsValid)
+            {
+                ProjectComment pC = await _projectRepository.AddProjectCommentAsync(projectComment);
+                if(pC != null)
+                {
+                    return Ok(pC);
+                }
+                else
+                {
+                    return Ok("error");
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+
         }
     }
 }

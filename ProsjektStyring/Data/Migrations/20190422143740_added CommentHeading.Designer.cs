@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProsjektStyring.Data;
 
 namespace ProsjektStyring.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190422143740_added CommentHeading")]
+    partial class addedCommentHeading
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -245,8 +247,6 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<int>("ProjectId");
 
-                    b.Property<string>("Unique_IdString");
-
                     b.HasKey("ProjectCommentId");
 
                     b.HasIndex("ProjectId");
@@ -301,13 +301,9 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<string>("Comment");
 
-                    b.Property<string>("CommentHeading");
-
                     b.Property<DateTime>("CommentRegistered");
 
                     b.Property<int>("ProjectCycleId");
-
-                    b.Property<string>("Unique_IdString");
 
                     b.HasKey("ProjectCycleCommentId");
 
@@ -371,13 +367,9 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<string>("Comment");
 
-                    b.Property<string>("CommentHeading");
-
                     b.Property<DateTime>("CommentRegistered");
 
                     b.Property<int>("ProjectCycleTaskId");
-
-                    b.Property<string>("Unique_IdString");
 
                     b.HasKey("ProjectTaskCommentId");
 
