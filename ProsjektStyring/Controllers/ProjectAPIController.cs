@@ -25,7 +25,7 @@ namespace ProsjektStyring.Controllers
             _userManager = uM;
         }
 
-        // [Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")] 
+        // ProjectCycle supporters
         [HttpPost("AddProjectCycle")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> AddProjectCycle([FromBody][Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")] AddProjectCycle projectCycle)
@@ -57,14 +57,38 @@ namespace ProsjektStyring.Controllers
             
         }
 
-        [HttpPost("AddProjectComment")]
-        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
-        public async Task<IActionResult> AddProjectComment([FromBody]AddProjectComment projectComment)
+
+        // ProjectTask
+        [HttpPost("AddProjectCycle")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> AddProjectCycleTask([FromBody][Bind("projectCycleId", "user", "cycleTTaskName", "cycleTaskDescription", "plannedHours", "dueDate")] AddProjectCycleTask cT)
         {
             if (ModelState.IsValid)
             {
-                ProjectComment pC = await _projectRepository.AddProjectCommentAsync(projectComment);
-                if(pC != null)
+                ProjectCycleTask pT = await _projectRepository.AddTaskToCycleAsync(cT);
+
+                if (pT != null)
+                {
+                    return Ok(pT);
+                }
+                else return Ok("error");
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
+        // Comments
+        [HttpPost("AddProjectComment")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
+        public async Task<IActionResult> AddProjectCycleComment([FromBody]AddProjectCycleComment projectCycleComment)
+        {
+            if (ModelState.IsValid)
+            {
+                ProjectCycleComment pC = await _projectRepository.AddProjectCycleCommentAsync(projectCycleComment);
+                if (pC != null)
                 {
                     return Ok(pC);
                 }
@@ -79,5 +103,29 @@ namespace ProsjektStyring.Controllers
             }
 
         }
+
+        [HttpPost("AddProjectComment")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
+        public async Task<IActionResult> AddProjectComment([FromBody]AddProjectComment projectComment)
+        {
+            if (ModelState.IsValid)
+            {
+                ProjectComment pC = await _projectRepository.AddProjectCommentAsync(projectComment);
+                if (pC != null)
+                {
+                    return Ok(pC);
+                }
+                else
+                {
+                    return Ok("error");
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
     }
 }

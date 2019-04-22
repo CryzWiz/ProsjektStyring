@@ -23,8 +23,12 @@ namespace ProsjektStyring.Models.IRepositorys
         // Cycles
         Task<ProjectCycle> AddCycleToProjectAsync(AddProjectCycle pC);
 
+        // Tasks
+        Task<ProjectCycleTask> AddTaskToCycleAsync(AddProjectCycleTask cT);
+
 
         // Comments
         Task<ProjectComment> AddProjectCommentAsync(AddProjectComment pC);
+        Task<ProjectCycleComment> AddProjectCycleCommentAsync(AddProjectCycleComment pC);
     }
 }

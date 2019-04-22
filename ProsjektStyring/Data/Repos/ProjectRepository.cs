@@ -134,6 +134,15 @@ namespace ProsjektStyring.Models.Repositorys
             else return null;
         }
 
+        public Task<ProjectCycleComment> AddProjectCycleCommentAsync(AddProjectCycleComment pC)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ProjectCycleTask> AddTaskToCycleAsync(AddProjectCycleTask cT)
+        {
+            throw new NotImplementedException();
+        }
 
         /// Helpers
         /// 
@@ -155,5 +164,6 @@ namespace ProsjektStyring.Models.Repositorys
             return p.ProjectId;
         }
 
+       
     }
 }
