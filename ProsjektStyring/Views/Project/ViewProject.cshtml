@@ -9,7 +9,7 @@
 
 @* Project details *@
 <div class="row">
-    <div class="container">
+    <div class="container bg-light">
         <h4 class="text-center">@Model.Project.ProjectName</h4>
         <hr />
         <dl class="row">
@@ -47,7 +47,7 @@
 <hr />
 @* ProjectCycles details *@
 <div class="row">
-    <div class="container">
+    <div class="container bg-light">
         <div id="PC-C">
             <h4 class="text-center">Prosjekt-sykluser</h4>
             <table class="table table-hover" id="CT">
@@ -225,5 +225,35 @@
 
 
 @section Scripts {
+
+    <script src="~/lib/datatables-1.10.19/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-1.10.19/dataTables.bootstrap4.min.js"></script>
     <script src="~/js/viewproject.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#CT').DataTable({
+                "language": {
+                    "lengthMenu": "Vis _MENU_ sykluser per side",
+                    "zeroRecords": "Ingen sykluser funnet!",
+                    "info": "Viser side _PAGE_ av _PAGES_",
+                    "infoEmpty": "N/A",
+                    "infoFiltered": "(filtrert ut fra _MAX_ sykluser)",
+                    "search": "S&oslash;k:",
+                    "sProcessing": "Jobber...",
+                    "sLoadingRecords": "Laster data...",
+                    "sEmptyTable": "Ingen sykluser funnet!",
+                    "paginate": {
+                        "previous": "Forrige",
+                        "next": "Neste",
+                        "first": "F&oslash;rste",
+                        "last": "Siste"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Sorter stigende",
+                        "sSortDescending": ": Sorter synkende"
+                    }
+                }
+            });
+        });
+    </script>
 }

@@ -9,7 +9,7 @@
 
 @* ProjectCycle details *@
 <div class="row">
-    <div class="container">
+    <div class="container bg-light">
         <h4 class="text-center">@Model.ProjectCycle.Project.ProjectName - @Model.ProjectCycle.CycleName</h4>
         <hr />
         <dl class="row">
@@ -44,7 +44,7 @@
 
 @* ProjectCycleTask details *@
 <div class="row">
-    <div class="container">
+    <div class="container bg-light">
         <h4 class="text-center">Oppgaver for denne syklusen</h4>
 
         <div id="PC-C">
@@ -126,9 +126,9 @@
                             <label>Beskrivelse:</label>
                             <input class="form-control" placeholder="Beskrivelse" id="newTaskDescription" />
                             <label>Planlagt tidsforbruk:</label>
-                            <input class="form-control" placeholder="Antall timer, men du kan bruke desimaler for minutt" id="newTaskPlannedHours"/>
+                            <input class="form-control" placeholder="Antall timer, men du kan bruke desimaler for minutt" id="newTaskPlannedHours" />
                             <label>Frist:</label>
-                            <input class="form-control" id="newTaskDueDate" type="date"/>
+                            <input class="form-control" id="newTaskDueDate" type="date" />
 
                             <hr />
                             <label>Opprettet av:</label>
@@ -218,5 +218,34 @@
 
 
 @section Scripts {
+    <script src="~/lib/datatables-1.10.19/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-1.10.19/dataTables.bootstrap4.min.js"></script>
     <script src="~/js/viewprojectcycle.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#CT').DataTable({
+                "language": {
+                    "lengthMenu": "Vis _MENU_ oppgaver per side",
+                    "zeroRecords": "Ingen oppgaver funnet!",
+                    "info": "Viser side _PAGE_ av _PAGES_",
+                    "infoEmpty": "N/A",
+                    "infoFiltered": "(filtrert ut fra _MAX_ oppgaver)",
+                    "search": "S&oslash;k:",
+                    "sProcessing": "Jobber...",
+                    "sLoadingRecords": "Laster data...",
+                    "sEmptyTable": "Ingen oppgaver funnet!",
+                    "paginate": {
+                        "previous": "Forrige",
+                        "next": "Neste",
+                        "first": "F&oslash;rste",
+                        "last": "Siste"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Sorter stigende",
+                        "sSortDescending": ": Sorter synkende"
+                    }
+                }
+            });
+        });
+    </script>
 }

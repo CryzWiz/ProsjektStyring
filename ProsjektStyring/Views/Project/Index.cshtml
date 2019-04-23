@@ -9,11 +9,9 @@
 <p>
     <a asp-action="CreateProject">Opprett nytt prosjekt</a>
 </p>
-
-@if (Model.UnActivatedProjects.Count > 0)
-{
+<div class="container bg-light">
     <h4 class="text-center">Ikke påbegynte prosjekter</h4>
-    <table class="table table-hover">
+    <table class="table table-hover" id="notStartedProjects">
         <thead>
             <tr>
                 <th>Prosjekt</th>
@@ -40,14 +38,13 @@
             }
         </tbody>
     </table>
-
-    <hr />
-}
-
-@if (Model.ActiveProjects.Count > 0)
-{
+</div>
+<br />
+<hr />
+<br />
+<div class="container bg-light">
     <h4 class="text-center">Aktive Prosjekter</h4>
-    <table class="table">
+    <table class="table table-hover" id="activeProjects">
         <thead>
             <tr>
                 <th>Prosjekt</th>
@@ -74,13 +71,13 @@
             }
         </tbody>
     </table>
-
-    <hr />
-}
-@if (Model.CompletedProjects.Count > 0)
-{
+</div>
+<br />
+<hr />
+<br />
+<div class="container bg-light">
     <h4 class="text-center">Ferdigstilte Prosjekter</h4>
-    <table class="table">
+    <table class="table table-hover" id="doneProjects">
         <thead>
             <tr>
                 <th>Prosjekt</th>
@@ -107,8 +104,33 @@
             }
         </tbody>
     </table>
-}
-@if (Model.UnActivatedProjects.Count == 0 && Model.CompletedProjects.Count == 0 && Model.ActiveProjects.Count == 0)
-{
-    <h4 style="color:red;">Ingen prosjekter funnet!</h4>
+</div>
+
+
+@section Scripts  {
+    <script src="~/lib/datatables-1.10.19/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-1.10.19/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#doneProjects').DataTable({
+                "language": {
+                    "url": "lib/datatables-1.10.19/language_NO.json"
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('#activeProjects').DataTable({
+                "language": {
+                    "url": "lib/datatables-1.10.19/language_NO.json"
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('#notStartedProjects').DataTable({
+                "language": {
+                    "url": "lib/datatables-1.10.19/language_NO.json"
+                }
+            });
+        });
+    </script>
 }

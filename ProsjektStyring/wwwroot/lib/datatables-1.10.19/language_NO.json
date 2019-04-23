@@ -1,0 +1,21 @@
+{
+  "lengthMenu": "Vis _MENU_ prosjekter per side",
+  "zeroRecords": "Ingen prosjekter funnet!",
+  "info": "Viser side _PAGE_ av _PAGES_",
+  "infoEmpty": "N/A",
+  "infoFiltered": "(filtrert ut fra _MAX_ prosjekter)",
+  "search": "S&oslash;k:",
+  "sProcessing": "Jobber...",
+  "sLoadingRecords": "Laster data...",
+  "sEmptyTable": "Ingen prosjekter funnet!",
+  "paginate": {
+    "previous": "Forrige",
+    "next": "Neste",
+    "first": "F&oslash;rste",
+    "last": "Siste"
+  },
+  "oAria": {
+    "sSortAscending": ": Sorter stigende",
+    "sSortDescending": ": Sorter synkende"
+  }
+}
