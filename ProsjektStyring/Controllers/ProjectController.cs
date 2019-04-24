@@ -100,7 +100,9 @@ namespace ProsjektStyring.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
-        public async Task<IActionResult> CreateProject([FromForm][Bind("ProjectName", "ProjectClient", "ProjectDescription", "ProjectPlannedStart", "ProjectPlannedEnd")] CreateProjectViewModel model)
+        public async Task<IActionResult> CreateProject([FromForm]
+        [Bind("ProjectName", "ProjectClient", "ProjectDescription", "ProjectPlannedStart", "ProjectPlannedEnd")]
+        CreateProjectViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -138,7 +140,8 @@ namespace ProsjektStyring.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> AddProjectCycle([FromForm]
-        [Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")] ViewProjectViewModel model)
+        [Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")]
+        ViewProjectViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -176,7 +179,8 @@ namespace ProsjektStyring.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> AddCycleTask([FromForm]
-        [Bind("tprojectCycleId", "user", "taskName", "taskDescription", "tplannedHours", "tdueDate")] ViewProjectCycleViewModel model)
+        [Bind("tprojectCycleId", "user", "taskName", "taskDescription", "tplannedHours", "tdueDate")]
+        ViewProjectCycleViewModel model)
         {
             if (ModelState.IsValid)
             {

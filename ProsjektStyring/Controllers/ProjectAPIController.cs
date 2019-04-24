@@ -25,7 +25,7 @@ namespace ProsjektStyring.Controllers
             _userManager = uM;
         }
 
-        // ProjectCycle supporters
+        // ProjectCycle - controls
         [HttpPost("AddProjectCycle")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> AddProjectCycle([FromBody]
@@ -59,7 +59,7 @@ namespace ProsjektStyring.Controllers
         }
 
 
-        // ProjectTask
+        // ProjectTask - controls
         [HttpPost("AddProjectCycleTask")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> AddProjectCycleTask([FromBody]
@@ -94,7 +94,8 @@ namespace ProsjektStyring.Controllers
 
         }
 
-        // Comments
+        // Comments 
+        // - Divided in 3 different classes and methods just in case we want to make them different in some way
         [HttpPost("AddProjectComment")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
         public async Task<IActionResult> AddProjectComment([FromBody]
