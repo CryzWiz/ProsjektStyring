@@ -7,6 +7,9 @@
     ViewData["Title"] = Model.ProjectCycle.Project.ProjectName + " - " + Model.ProjectCycle.CycleName;
 }
 
+@* error or success message *@
+@await Html.PartialAsync("../Shared/_error_msg")
+
 @* ProjectCycle details *@
 <div class="row">
     <div class="container bg-light">
@@ -218,6 +221,8 @@
 
 
 @section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/lib/datatables-1.10.19/jquery.dataTables.min.js"></script>
     <script src="~/lib/datatables-1.10.19/dataTables.bootstrap4.min.js"></script>
     <script src="~/js/viewprojectcycle.js"></script>
@@ -248,4 +253,5 @@
             });
         });
     </script>
+
 }

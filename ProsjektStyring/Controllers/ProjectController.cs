@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProsjektStyring.Data;
 using ProsjektStyring.Models.IRepositorys;
+using ProsjektStyring.Models.ProjectApiControllerModels;
 using ProsjektStyring.Models.ProjectControllerModels;
 using ProsjektStyring.Models.SeedData;
 
@@ -48,7 +49,6 @@ namespace ProsjektStyring.Controllers
             {
                 Project = p
             };
-
             return View(model);
         }
 
@@ -95,21 +95,62 @@ namespace ProsjektStyring.Controllers
                 var r = await _projectRepository.CreateProject(p);
                 if (r != null)
                 {
+                    ViewData["success"] = "Nytt prosjekt er opprettet.";
                     return RedirectToAction("ViewProject", new { id = r});
                 }
                 else
                 {
-                    ViewData["Error"] = "Noe gikk galt. Prøv igjen. Om feilen vedvarer, kontakt teknisk support.";
+                    ViewData["error"] = "Noe gikk galt. Prøv igjen. Om feilen vedvarer, kontakt teknisk support.";
                     return View(model);
                 }
             }
             else
             {
-                ViewData["Error"] = "Noe gikk galt. Prøv igjen. Om feilen vedvarer, kontakt teknisk support.";
-                return View(model);
+                TempData["error"] = "Feil med data mottat. ModelStateInvalid!";
+                return RedirectToAction("Index", null);
             }
             
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> AddProjectCycle([FromForm]
+        [Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")] ViewProjectViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                AddProjectCycle c = new AddProjectCycle
+                {
+                    cycleName = model.cycleName,
+                    cycleDescription = model.cycleDescription,
+                    startDate = model.startDate,
+                    endDate = model.endDate,
+                    projectId = model.projectId,
+                    user = model.user
+                };
+
+                var r = await _projectRepository.AddCycleToProjectAsync(c);
+                if(r != null)
+                {
+                    TempData["success"] = "Ny syklus er lagt til.";
+                    return RedirectToAction("ViewProject", new { id = model.projectId });
+                }
+                else
+                {
+                    TempData["error"] = "Noe gikk galt. Prøv igjen. Om feilen vedvarer, kontakt teknisk support.";
+                    return RedirectToAction("ViewProject", new { id = model.projectId });
+                }
+                
+            }
+            else
+            {
+                TempData["error"] = "Feil med data mottat. ModelStateInvalid!";
+                return RedirectToAction("ViewProject", new { id = model.projectId });
+            }
+
+        }
+
 
 
     }

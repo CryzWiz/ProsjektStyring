@@ -7,6 +7,9 @@
     ViewData["Title"] = Model.Project.ProjectName;
 }
 
+@* error or success message *@
+@await Html.PartialAsync("../Shared/_error_msg")
+
 @* Project details *@
 <div class="row">
     <div class="container bg-light">
@@ -41,6 +44,7 @@
             <dt class="col-sm-3">Beskrivelse:</dt>
             <dd class="col-sm-9">@Model.Project.ProjectDescription</dd>
         </dl>
+
     </div>
 </div>
 
@@ -127,25 +131,44 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <label>Syklus navn:</label>
-                            <input class="form-control" placeholder="Syklus navn" id="NCycleName" />
-                            <label>Beskrivelse:</label>
-                            <input class="form-control" placeholder="Beskrivelse" id="NCycleDescription" />
-                            <label>Planlagt start:</label>
-                            <input class="form-control" id="NPStart" type="date" />
-                            <label>Planlagt slutt:</label>
-                            <input class="form-control" id="NPSlutt" type="date" />
+                            <form asp-action="AddProjectCycle">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="cycleName" class="control-label"></label>
+                                    <input asp-for="cycleName" class="form-control" />
+                                    <span asp-validation-for="cycleName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="cycleDescription" class="control-label"></label>
+                                    <input asp-for="cycleDescription" class="form-control" />
+                                    <span asp-validation-for="cycleDescription" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="startDate" class="control-label"></label>
+                                    <input asp-for="startDate" class="form-control" />
+                                    <span asp-validation-for="startDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="endDate" class="control-label"></label>
+                                    <input asp-for="endDate" class="form-control" />
+                                    <span asp-validation-for="endDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="user" class="form-control" value="@User.Identity.Name" hidden />
+                                    <span asp-validation-for="endDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="projectId" class="form-control" value="@Model.Project.Unique_ProjectIdString" hidden />
+                                    <span asp-validation-for="projectId" class="text-danger"></span>
+                                </div>
 
-                            <hr />
-                            <label>Opprettet av:</label>
-                            <input class="form-control" value="@User.Identity.Name" id="NCreatedBy" disabled />
-                            <label>Prosjekt-Id:</label>
-                            <input class="form-control" value="@Model.Project.Unique_ProjectIdString" id="NProjectId" disabled />
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+                                    <input type="submit" value="Legg til" class="btn btn-primary" />
+                                </div>
+                            </form>
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
-                            <button type="button" class="btn btn-primary" onclick="addCycle()" data-dismiss="modal">Legg til</button>
+
                         </div>
                     </div>
                 </div>
@@ -225,7 +248,7 @@
 
 
 @section Scripts {
-
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/lib/datatables-1.10.19/jquery.dataTables.min.js"></script>
     <script src="~/lib/datatables-1.10.19/dataTables.bootstrap4.min.js"></script>
     <script src="~/js/viewproject.js"></script>

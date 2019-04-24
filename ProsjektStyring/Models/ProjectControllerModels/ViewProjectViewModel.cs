@@ -1,4 +1,5 @@
 ﻿using ProsjektStyring.Data;
+using ProsjektStyring.Models.ProjectApiControllerModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,5 +12,33 @@ namespace ProsjektStyring.Models.ProjectControllerModels
     {
         [Display(Name = "Prosjekt")]
         public Project Project { get; set; }
+
+        [Required]
+        public string projectId { get; set; }
+        [Required]
+        [Display(Name = "Bruker")]
+        public string user { get; set; }
+
+        [Required]
+        [Display(Name = "Syklus navn")]
+        [StringLength(60, MinimumLength = 3)]
+        public string cycleName { get; set; }
+
+        [Required]
+        [Display(Name = "Syklus beskrivelse")]
+        [StringLength(60, MinimumLength = 3)]
+        public string cycleDescription { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        [Display(Name = "Planlagt Startdato")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime startDate { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        [Display(Name = "Planlagt Sluttdato")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime endDate { get; set; }
     }
 }
