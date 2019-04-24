@@ -76,13 +76,13 @@
                         {
                             <tr>
                                 <td>
-                                    @item.TaskName
+                                    @Html.DisplayFor(model => item.TaskName)
                                 </td>
                                 <td>
-                                    @item.TaskDescription
+                                    @Html.DisplayFor(model => item.TaskDescription)
                                 </td>
                                 <td>
-                                    @item.TaskDueDate
+                                    @Html.DisplayFor(model => item.TaskDueDate)
                                 </td>
                                 @if (item.TaskCompleted)
                                 {
@@ -143,7 +143,7 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="tdueDate" class="control-label"></label>
-                                <input asp-for="tdueDate" class="form-control" />
+                                <input asp-for="tdueDate" class="form-control" value="@DateTime.Now.Date"/>
                                 <span asp-validation-for="tdueDate" class="text-danger"></span>
                             </div>
                             <div class="form-group">

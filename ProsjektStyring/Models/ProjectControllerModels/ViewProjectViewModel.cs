@@ -12,29 +12,31 @@ namespace ProsjektStyring.Models.ProjectControllerModels
     {
         public Project Project { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Prosjekt-id mangler")]
         public string projectId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Brukernavn mangler")]
         [Display(Name = "Bruker")]
         public string user { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Navn for syklusen må fylles inn")]
         [Display(Name = "Syklus navn")]
-        [StringLength(60, MinimumLength = 3)]
+        [StringLength(60, MinimumLength = 3, 
+            ErrorMessage = "Verdi for {0} må være mellom {1} og {2} tegn.")]
         public string cycleName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Beskrivelse for syklusen må fylles ut")]
         [Display(Name = "Syklus beskrivelse")]
-        [StringLength(60, MinimumLength = 3)]
+        [StringLength(600, MinimumLength = 3,
+            ErrorMessage = "Verdi for {0} må være mellom {1} og {2} tegn.")]
         public string cycleDescription { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Startdato må fylles ut")]
         [DataType(DataType.Date)]
         [Display(Name = "Planlagt Startdato")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime startDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Sluttdato må fylles ut")]
         [DataType(DataType.Date)]
         [Display(Name = "Planlagt Sluttdato")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]

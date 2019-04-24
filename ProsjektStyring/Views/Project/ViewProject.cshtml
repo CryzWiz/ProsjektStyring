@@ -18,12 +18,9 @@
         </h4>
         <hr />
         <dl class="row">
-            <dt class="col-sm-2">Prosjekt for:</dt>
-            <dd class="col-sm-4">
-                @Html.DisplayFor(model => model.Project.ProjectClient)
-            </dd>
-
-            <dt class="col-sm-2">Status:</dt>
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Project.ProjectClient):</dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.Project.ProjectClient)</dd>
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Project.ProjectCompleted):</dt>
             @if (Model.Project.ProjectActive)
             {
                 <dd class="col-sm-4"><span style="color:green">Aktiv</span></dd>
@@ -89,19 +86,19 @@
                     {
                         <tr>
                             <td>
-                                @item.CycleNumber
+                                @Html.DisplayFor(model => item.CycleNumber)
                             </td>
                             <td>
-                                @item.CycleName
+                                @Html.DisplayFor(model => item.CycleName)
                             </td>
                             <td>
-                                @item.CycleDescription
+                                @Html.DisplayFor(model => item.CycleDescription)
                             </td>
                             <td>
-                                @item.CyclePlannedStart
+                                @Html.DisplayFor(model => item.CyclePlannedStart)
                             </td>
                             <td>
-                                @item.CyclePlannedEnd
+                                @Html.DisplayFor(model => item.CyclePlannedEnd)
                             </td>
                             @if (item.CycleActive)
                             {
@@ -151,12 +148,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="startDate" class="control-label"></label>
-                                    <input asp-for="startDate" class="form-control" />
+                                    <input asp-for="startDate" class="form-control" value="@DateTime.Now"/>
                                     <span asp-validation-for="startDate" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="endDate" class="control-label"></label>
-                                    <input asp-for="endDate" class="form-control" />
+                                    <input asp-for="endDate" class="form-control" value="@DateTime.Now"/>
                                     <span asp-validation-for="endDate" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">

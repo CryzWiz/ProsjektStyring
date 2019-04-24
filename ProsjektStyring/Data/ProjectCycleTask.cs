@@ -18,7 +18,6 @@ namespace ProsjektStyring.Data
         public ProjectCycle ProjectCycle { get; set; }
 
         [Required]
-        [StringLength(60, MinimumLength = 3)]
         [Display(Name = "Oppgave")]
         public string TaskName { get; set; }
 
@@ -29,8 +28,6 @@ namespace ProsjektStyring.Data
         [Display(Name = "Status")]
         public string TaskStatus { get; set; }
 
-
-        [StringLength(60, MinimumLength = 3)]
         [Display(Name = "Låst til")]
         public string TaskUnderUser { get; set; }
 
@@ -43,13 +40,14 @@ namespace ProsjektStyring.Data
         [Display(Name = "Oppgave fullført")]
         public bool TaskCompleted { get; set; }
 
-        [Range(1, 100)]
-        [DataType(DataType.Duration)]
+        [Range(0.1, 1000.0,
+        ErrorMessage = "Verdi for {0} må være mellom {1} og {2}.")]
         [Column(TypeName = "double(18, 2)")]
         [Display(Name = "Planlagt tid")]
         public double PlannedHours { get; set; }
 
-        [Range(1, 100)]
+        [Range(1, 100,
+        ErrorMessage = "Verdi for {0} må være mellom {1} og {2}.")]
         [DataType(DataType.Duration)]
         [Column(TypeName = "double(18, 2)")]
         [Display(Name = "Tid brukt")]
