@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace ProsjektStyring.Data
 {
-    public class ProjectTaskComment
+    public class ProjectCycleTaskComment
     {
         [Key]
-        public int ProjectTaskCommentId { get; set; }
+        public int ProjectCycleTaskCommentId { get; set; }
 
         [ForeignKey("ProjectCycleTaskId")]
-        public int ProjectCycleTaskId { get; set; }      
+        public int ProjectCycleTaskId { get; set; }
+        public ProjectCycleTask ProjectCycleTask { get; set; }
 
         public DateTime CommentRegistered { get; set; }
         public string ByUser { get; set; }

@@ -42,14 +42,11 @@ namespace ProsjektStyring.Data
 
         [Range(0.1, 1000.0,
         ErrorMessage = "Verdi for {0} må være mellom {1} og {2}.")]
-        [Column(TypeName = "double(18, 2)")]
         [Display(Name = "Planlagt tid")]
         public double PlannedHours { get; set; }
 
         [Range(1, 100,
         ErrorMessage = "Verdi for {0} må være mellom {1} og {2}.")]
-        [DataType(DataType.Duration)]
-        [Column(TypeName = "double(18, 2)")]
         [Display(Name = "Tid brukt")]
         public double TotalHoursSpent { get; set; }
 
@@ -74,7 +71,7 @@ namespace ProsjektStyring.Data
         [Display(Name = "Klarert av")]
         public string TaskClearedByUser { get; set; }
 
-        public List<ProjectTaskComment> ProjectTaskComments { get; set; }
+        public List<ProjectCycleTaskComment> ProjectCycleTaskComments { get; set; }
 
     }
 }

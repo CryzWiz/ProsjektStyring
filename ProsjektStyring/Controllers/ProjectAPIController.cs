@@ -143,5 +143,29 @@ namespace ProsjektStyring.Controllers
 
         }
 
+        [HttpPost("AddProjectCycleTaskComment")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
+        public async Task<IActionResult> AddProjectCycleTaskComment([FromBody]
+        [Bind("projectCycleTaskId", "user", "commentHeading", "comment")]AddProjectCycleTaskComment projectCycleTaskComment)
+        {
+            if (ModelState.IsValid)
+            {
+                ProjectCycleTaskComment pC = await _projectRepository.AddProjectCycleTaskCommentAsync(projectCycleTaskComment);
+                if (pC != null)
+                {
+                    return Ok(pC);
+                }
+                else
+                {
+                    return Ok("error");
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
     }
 }

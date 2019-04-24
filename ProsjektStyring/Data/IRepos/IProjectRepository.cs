@@ -34,5 +34,6 @@ namespace ProsjektStyring.Models.IRepositorys
         // Comments
         Task<ProjectComment> AddProjectCommentAsync(AddProjectComment pC);
         Task<ProjectCycleComment> AddProjectCycleCommentAsync(AddProjectCycleComment pC);
+        Task<ProjectCycleTaskComment> AddProjectCycleTaskCommentAsync(AddProjectCycleTaskComment pC);
     }
 }

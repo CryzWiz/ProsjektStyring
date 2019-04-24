@@ -12,9 +12,6 @@ namespace ProsjektStyring.Models.ProjectControllerModels
         
         public ProjectCycle ProjectCycle { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime todaysDate { get { return DateTime.Now.Date; } }
-
         [Required(ErrorMessage = "Syklus-id mangler")]
         [Display(Name = "Syklus-id")]
         public string tprojectCycleId { get; set; }

@@ -89,7 +89,7 @@ namespace ProsjektStyring.Models.Repositorys
         }
         public async Task<ProjectCycleTask> GetProjectCycleTaskByUniqueId(string id)
         {
-            ProjectCycleTask task = await _db.ProjectCycleTask.Include("ProjectTaskComments").FirstOrDefaultAsync(x => x.Unique_TaskIdString == id);
+            ProjectCycleTask task = await _db.ProjectCycleTask.Include("ProjectCycleTaskComments").FirstOrDefaultAsync(x => x.Unique_TaskIdString == id);
             return task;
         }
         public async Task<Project> GetProjectByUniqueId(int id)
@@ -206,7 +206,25 @@ namespace ProsjektStyring.Models.Repositorys
             }
             else return null;
         }
-
+        public async Task<ProjectCycleTaskComment> AddProjectCycleTaskCommentAsync(AddProjectCycleTaskComment pC)
+        {
+            ProjectCycleTaskComment comment = new ProjectCycleTaskComment
+            {
+                CommentRegistered = DateTime.Now,
+                ByUser = pC.user,
+                Comment = pC.comment,
+                CommentHeading = pC.commentHeading,
+                ProjectCycleTaskId = await getProjectCycleTaskId(pC.projectCycleTaskId),
+                Unique_IdString = getGuid()
+            };
+            _db.Add(comment);
+            if (await _db.SaveChangesAsync() > 0)
+            {
+                var c = await _db.ProjectCycleTaskComment.FirstOrDefaultAsync(x => x.Unique_IdString == comment.Unique_IdString);
+                return c;
+            }
+            else return null;
+        }
 
 
         /// Helpers
@@ -235,6 +253,12 @@ namespace ProsjektStyring.Models.Repositorys
             return c.ProjectCycleId;
         }
 
-       
+        private async Task<int> getProjectCycleTaskId(string uniqueId)
+        {
+            var c = await _db.ProjectCycleTask.FirstOrDefaultAsync(x => x.Unique_TaskIdString == uniqueId);
+            return c.ProjectCycleId;
+        }
+
+
     }
 }

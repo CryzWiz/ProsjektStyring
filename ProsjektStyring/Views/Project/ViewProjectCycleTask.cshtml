@@ -40,7 +40,74 @@
     </div>
 </div>
 
+@* ProjectCycleComments *@
+<div class="row">
+    <div class="container">
+        <h4 class="text-center">Kommentarer til denne syklusen</h4>
+
+        <div class="col-lg-12 col-md-12 col-sm-12" id="pComments">
+            @if (Model.ProjectCycle.ProjectCycleComments != null)
+            {
+                foreach (var item in Model.ProjectCycle.ProjectCycleComments)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.CommentHeading</h5>
+                            <p class="card-text">@item.Comment</p>
+                            <p class="card-text"><small class="text-muted">@item.CommentRegistered - @item.ByUser</small></p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <h5 class="text-center">Ingen kommentarer registrert!</h5>
+            }
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2 offset-10">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCommentModal">
+                Legg til ny kommentar
+            </button>
+        </div>
+        <div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="addCommentModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Legg til en ny kommentar</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label>Overskrift:</label>
+                        <input class="form-control" placeholder="Din overskrift" id="CommentHeadline" />
+                        <label>Kommentar:</label>
+                        <textarea class="form-control" id="CommentText" rows="3" placeholder="Din kommentar..."></textarea>
+
+                        <hr />
+                        <label>Opprettet av:</label>
+                        <input class="form-control" value="@User.Identity.Name" id="CommentMadeBy" disabled />
+                        <input class="form-control" value="@Model.ProjectCycleTask.Unique_TaskIdString" id="CCycleTaskId" hidden />
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+                        <button type="button" class="btn btn-primary" onclick="addComment()" data-dismiss="modal">Legg til</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
 
 <div class="row">
     @Html.ActionLink("Tilbake til " + Model.ProjectCycle.CycleName, "ViewProjectCycle", new { id = Model.ProjectCycle.Unique_CycleIdString })
 </div>
+
+@section Scripts {
+
+    <script src="~/js/viewprojectcycle.js"></script>
+
+}

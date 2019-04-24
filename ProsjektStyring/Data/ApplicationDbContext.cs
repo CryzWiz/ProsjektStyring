@@ -19,7 +19,7 @@ namespace ProsjektStyring.Data
 
         public virtual DbSet<ProjectComment> ProjectComment { get; set; }
         public virtual DbSet<ProjectCycleComment> ProjectCycleComment { get; set; }
-        public virtual DbSet<ProjectTaskComment> ProjectTaskComment { get; set; }
+        public virtual DbSet<ProjectCycleTaskComment> ProjectCycleTaskComment { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

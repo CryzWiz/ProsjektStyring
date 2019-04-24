@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProsjektStyring.Data;
 
-namespace ProsjektStyring.Data.Migrations
+namespace ProsjektStyring.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190404152948_added projectCycles")]
-    partial class addedprojectCycles
+    [Migration("20190424222317_init-blankSlate")]
+    partial class initblankSlate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -87,11 +87,9 @@ namespace ProsjektStyring.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128);
+                    b.Property<string>("ProviderKey");
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -122,11 +120,9 @@ namespace ProsjektStyring.Data.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(128);
+                    b.Property<string>("Name");
 
                     b.Property<string>("Value");
 
@@ -202,9 +198,12 @@ namespace ProsjektStyring.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("NumberOfProjectCycles");
+
                     b.Property<bool>("ProjectActive");
 
-                    b.Property<string>("ProjectClient");
+                    b.Property<string>("ProjectClient")
+                        .HasMaxLength(60);
 
                     b.Property<string>("ProjectClosedByUser");
 
@@ -212,13 +211,13 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<string>("ProjectCreatedByUser");
 
-                    b.Property<int>("ProjectCycles");
-
                     b.Property<string>("ProjectDescription");
 
                     b.Property<DateTime>("ProjectEnd");
 
-                    b.Property<string>("ProjectName");
+                    b.Property<string>("ProjectName")
+                        .IsRequired()
+                        .HasMaxLength(60);
 
                     b.Property<DateTime>("ProjectPlannedEnd");
 
@@ -235,6 +234,31 @@ namespace ProsjektStyring.Data.Migrations
                     b.ToTable("Project");
                 });
 
+            modelBuilder.Entity("ProsjektStyring.Data.ProjectComment", b =>
+                {
+                    b.Property<int>("ProjectCommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ByUser");
+
+                    b.Property<string>("Comment");
+
+                    b.Property<string>("CommentHeading");
+
+                    b.Property<DateTime>("CommentRegistered");
+
+                    b.Property<int>("ProjectId");
+
+                    b.Property<string>("Unique_IdString");
+
+                    b.HasKey("ProjectCommentId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectComment");
+                });
+
             modelBuilder.Entity("ProsjektStyring.Data.ProjectCycle", b =>
                 {
                     b.Property<int>("ProjectCycleId")
@@ -249,7 +273,9 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<bool>("CycleFinished");
 
-                    b.Property<string>("CycleName");
+                    b.Property<string>("CycleName")
+                        .IsRequired()
+                        .HasMaxLength(60);
 
                     b.Property<int>("CycleNumber");
 
@@ -272,9 +298,34 @@ namespace ProsjektStyring.Data.Migrations
                     b.ToTable("ProjectCycle");
                 });
 
-            modelBuilder.Entity("ProsjektStyring.Data.ProjectTask", b =>
+            modelBuilder.Entity("ProsjektStyring.Data.ProjectCycleComment", b =>
                 {
-                    b.Property<int>("ProjectTaskId")
+                    b.Property<int>("ProjectCycleCommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ByUser");
+
+                    b.Property<string>("Comment");
+
+                    b.Property<string>("CommentHeading");
+
+                    b.Property<DateTime>("CommentRegistered");
+
+                    b.Property<int>("ProjectCycleId");
+
+                    b.Property<string>("Unique_IdString");
+
+                    b.HasKey("ProjectCycleCommentId");
+
+                    b.HasIndex("ProjectCycleId");
+
+                    b.ToTable("ProjectCycleComment");
+                });
+
+            modelBuilder.Entity("ProsjektStyring.Data.ProjectCycleTask", b =>
+                {
+                    b.Property<int>("ProjectCycleTaskId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -283,8 +334,6 @@ namespace ProsjektStyring.Data.Migrations
                     b.Property<double>("PlannedHours");
 
                     b.Property<int>("ProjectCycleId");
-
-                    b.Property<int?>("ProjectId");
 
                     b.Property<int>("ProsentageDone");
 
@@ -300,7 +349,8 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<DateTime>("TaskDueDate");
 
-                    b.Property<string>("TaskName");
+                    b.Property<string>("TaskName")
+                        .IsRequired();
 
                     b.Property<DateTime>("TaskRegistered");
 
@@ -312,13 +362,36 @@ namespace ProsjektStyring.Data.Migrations
 
                     b.Property<string>("Unique_TaskIdString");
 
-                    b.HasKey("ProjectTaskId");
+                    b.HasKey("ProjectCycleTaskId");
 
                     b.HasIndex("ProjectCycleId");
 
-                    b.HasIndex("ProjectId");
+                    b.ToTable("ProjectCycleTask");
+                });
 
-                    b.ToTable("ProjectTask");
+            modelBuilder.Entity("ProsjektStyring.Data.ProjectCycleTaskComment", b =>
+                {
+                    b.Property<int>("ProjectCycleTaskCommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ByUser");
+
+                    b.Property<string>("Comment");
+
+                    b.Property<string>("CommentHeading");
+
+                    b.Property<DateTime>("CommentRegistered");
+
+                    b.Property<int>("ProjectCycleTaskId");
+
+                    b.Property<string>("Unique_IdString");
+
+                    b.HasKey("ProjectCycleTaskCommentId");
+
+                    b.HasIndex("ProjectCycleTaskId");
+
+                    b.ToTable("ProjectCycleTaskComment");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -366,24 +439,44 @@ namespace ProsjektStyring.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("ProsjektStyring.Data.ProjectCycle", b =>
+            modelBuilder.Entity("ProsjektStyring.Data.ProjectComment", b =>
                 {
-                    b.HasOne("ProsjektStyring.Data.Project", "Project")
-                        .WithMany()
+                    b.HasOne("ProsjektStyring.Data.Project")
+                        .WithMany("ProjectComments")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("ProsjektStyring.Data.ProjectTask", b =>
+            modelBuilder.Entity("ProsjektStyring.Data.ProjectCycle", b =>
                 {
-                    b.HasOne("ProsjektStyring.Data.ProjectCycle", "ProjectCycle")
-                        .WithMany()
+                    b.HasOne("ProsjektStyring.Data.Project", "Project")
+                        .WithMany("ProjectCycles")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ProsjektStyring.Data.ProjectCycleComment", b =>
+                {
+                    b.HasOne("ProsjektStyring.Data.ProjectCycle")
+                        .WithMany("ProjectCycleComments")
                         .HasForeignKey("ProjectCycleId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
 
-                    b.HasOne("ProsjektStyring.Data.Project")
-                        .WithMany("ProjectTasks")
-                        .HasForeignKey("ProjectId");
+            modelBuilder.Entity("ProsjektStyring.Data.ProjectCycleTask", b =>
+                {
+                    b.HasOne("ProsjektStyring.Data.ProjectCycle", "ProjectCycle")
+                        .WithMany("ProjectCycleTasks")
+                        .HasForeignKey("ProjectCycleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ProsjektStyring.Data.ProjectCycleTaskComment", b =>
+                {
+                    b.HasOne("ProsjektStyring.Data.ProjectCycleTask", "ProjectCycleTask")
+                        .WithMany("ProjectCycleTaskComments")
+                        .HasForeignKey("ProjectCycleTaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
