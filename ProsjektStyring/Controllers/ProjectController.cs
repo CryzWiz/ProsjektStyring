@@ -24,6 +24,7 @@ namespace ProsjektStyring.Controllers
             _userManager = uM;
         }
 
+        /// GET ///
         [HttpGet]
         [Route("Project/")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
@@ -75,82 +76,6 @@ namespace ProsjektStyring.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
-        public async Task<IActionResult> CreateProject([FromForm][Bind("ProjectName","ProjectClient","ProjectDescription","ProjectPlannedStart","ProjectPlannedEnd")] CreateProjectViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.GetUserAsync(User);
-
-                Project p = new Project { };
-                p.ProjectName = model.ProjectName;
-                p.ProjectClient = model.ProjectClient;
-                p.ProjectDescription = model.ProjectDescription;
-                p.ProjectPlannedStart = model.ProjectPlannedStart;
-                p.ProjectPlannedEnd = model.ProjectPlannedEnd;
-                p.ProjectCreatedByUser = user.UserName;
-
-                var r = await _projectRepository.CreateProject(p);
-                if (r != null)
-                {
-                    ViewData["success"] = "Nytt prosjekt er opprettet.";
-                    return RedirectToAction("ViewProject", new { id = r});
-                }
-                else
-                {
-                    ViewData["error"] = "Noe gikk galt. Prøv igjen. Om feilen vedvarer, kontakt teknisk support.";
-                    return View(model);
-                }
-            }
-            else
-            {
-                TempData["error"] = "Feil med data mottat. ModelStateInvalid!";
-                return RedirectToAction("Index", null);
-            }
-            
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
-        public async Task<IActionResult> AddProjectCycle([FromForm]
-        [Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")] ViewProjectViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                AddProjectCycle c = new AddProjectCycle
-                {
-                    cycleName = model.cycleName,
-                    cycleDescription = model.cycleDescription,
-                    startDate = model.startDate,
-                    endDate = model.endDate,
-                    projectId = model.projectId,
-                    user = model.user
-                };
-
-                var r = await _projectRepository.AddCycleToProjectAsync(c);
-                if(r != null)
-                {
-                    TempData["success"] = "Ny syklus er lagt til.";
-                    return RedirectToAction("ViewProject", new { id = model.projectId });
-                }
-                else
-                {
-                    TempData["error"] = "Noe gikk galt. Prøv igjen. Om feilen vedvarer, kontakt teknisk support.";
-                    return RedirectToAction("ViewProject", new { id = model.projectId });
-                }
-                
-            }
-            else
-            {
-                TempData["error"] = "Feil med data mottat. ModelStateInvalid!";
-                return RedirectToAction("ViewProject", new { id = model.projectId });
-            }
-
-        }
-
         [HttpGet]
         [Route("Project/ViewProjectCycleTask/{id}")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
@@ -171,6 +96,119 @@ namespace ProsjektStyring.Controllers
         }
 
 
+        /// POST ///
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> CreateProject([FromForm][Bind("ProjectName", "ProjectClient", "ProjectDescription", "ProjectPlannedStart", "ProjectPlannedEnd")] CreateProjectViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                Project p = new Project { };
+                p.ProjectName = model.ProjectName;
+                p.ProjectClient = model.ProjectClient;
+                p.ProjectDescription = model.ProjectDescription;
+                p.ProjectPlannedStart = model.ProjectPlannedStart;
+                p.ProjectPlannedEnd = model.ProjectPlannedEnd;
+                p.ProjectCreatedByUser = user.UserName;
+
+                var r = await _projectRepository.CreateProject(p);
+                if (r != null)
+                {
+                    ViewData["success"] = "Nytt prosjekt er opprettet.";
+                    return RedirectToAction("ViewProject", new { id = r });
+                }
+                else
+                {
+                    ViewData["error"] = "Noe gikk galt. Prøv igjen. Om feilen vedvarer, kontakt teknisk support.";
+                    return View(model);
+                }
+            }
+            else
+            {
+                TempData["error"] = "Feil med mottatt data. ModelStateInvalid!";
+                return RedirectToAction("Index", null);
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> AddProjectCycle([FromForm]
+        [Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")] ViewProjectViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                AddProjectCycle c = new AddProjectCycle
+                {
+                    cycleName = model.cycleName,
+                    cycleDescription = model.cycleDescription,
+                    startDate = model.startDate,
+                    endDate = model.endDate,
+                    projectId = model.projectId,
+                    user = model.user
+                };
+                var r = await _projectRepository.AddCycleToProjectAsync(c);
+                if (r != null)
+                {
+                    TempData["success"] = "Ny syklus er lagt til.";
+                    return RedirectToAction("ViewProject", new { id = model.projectId });
+                }
+                else
+                {
+                    TempData["error"] = "Noe gikk galt. Prøv igjen. Om feilen vedvarer, kontakt teknisk support.";
+                    return RedirectToAction("ViewProject", new { id = model.projectId });
+                }
+
+            }
+            else
+            {
+                TempData["error"] = "Feil med mottatt data. ModelStateInvalid!";
+                return RedirectToAction("ViewProject", new { id = model.projectId });
+            }
+
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> AddCycleTask([FromForm]
+        [Bind("tprojectCycleId", "user", "taskName", "taskDescription", "tplannedHours", "tdueDate")] ViewProjectCycleViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                AddProjectCycleTask t = new AddProjectCycleTask
+                {
+                    cycleTaskName = model.taskName,
+                    cycleTaskDescription = model.taskDescription,
+                    plannedHours = model.tplannedHours,
+                    dueDate = model.tdueDate,
+                    projectCycleId = model.tprojectCycleId,
+                    user = model.user
+                };
+                var r = await _projectRepository.AddTaskToCycleAsync(t);
+                if (r != null)
+                {
+                    TempData["success"] = "Ny oppgave er lagt til.";
+                    return RedirectToAction("ViewProjectCycle", new { id = model.tprojectCycleId });
+                }
+                else
+                {
+                    TempData["error"] = "Noe gikk galt. Prøv igjen. Om feilen vedvarer, kontakt teknisk support.";
+                    return RedirectToAction("ViewProjectCycle", new { id = model.tprojectCycleId });
+                }
+
+            }
+            else
+            {
+                TempData["error"] = "Feil med mottatt data. ModelStateInvalid!";
+                return RedirectToAction("ViewProjectCycle", new { id = model.tprojectCycleId });
+            }
+
+        }
 
     }
 }

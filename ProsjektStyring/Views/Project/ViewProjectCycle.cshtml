@@ -50,7 +50,7 @@
     <div class="container bg-light">
         <h4 class="text-center">Oppgaver for denne syklusen</h4>
 
-        <div id="PC-C">
+
             @if (Model.ProjectCycle.ProjectCycleTasks != null)
             {
                 <table class="table table-hover" id="CT">
@@ -123,27 +123,44 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            <label>Oppgave:</label>
-                            <input class="form-control" placeholder="Beskrivende navn" id="newTaskName" />
-                            <label>Beskrivelse:</label>
-                            <input class="form-control" placeholder="Beskrivelse" id="newTaskDescription" />
-                            <label>Planlagt tidsforbruk:</label>
-                            <input class="form-control" placeholder="Antall timer, men du kan bruke desimaler for minutt" id="newTaskPlannedHours" />
-                            <label>Frist:</label>
-                            <input class="form-control" id="newTaskDueDate" type="date" />
+                        <div class="modal-body">                          
+                            <form asp-action="AddCycleTask">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="taskName" class="control-label"></label>
+                                <input asp-for="taskName" class="form-control" />
+                                <span asp-validation-for="taskName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="taskDescription" class="control-label"></label>
+                                <input asp-for="taskDescription" class="form-control" />
+                                <span asp-validation-for="taskDescription" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="tplannedHours" class="control-label"></label>
+                                <input asp-for="tplannedHours" class="form-control" placeholder="i timer. Bruk desimaler for minutt" />
+                                <span asp-validation-for="tplannedHours" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="tdueDate" class="control-label"></label>
+                                <input asp-for="tdueDate" class="form-control" />
+                                <span asp-validation-for="tdueDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input asp-for="user" class="form-control" value="@User.Identity.Name" hidden />
+                                <span asp-validation-for="user" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input asp-for="tprojectCycleId" class="form-control" value="@Model.ProjectCycle.Unique_CycleIdString" hidden />
+                                <span asp-validation-for="tprojectCycleId" class="text-danger"></span>
+                            </div>
 
-                            <hr />
-                            <label>Opprettet av:</label>
-                            <input class="form-control" value="@User.Identity.Name" id="newTaskCreatedBy" disabled />
-                            <label>Prosjekt-Id:</label>
-                            <input class="form-control" value="@Model.ProjectCycle.Unique_CycleIdString" id="newTaskProjectCycleId" disabled />
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+                                <input type="submit" value="Legg til" class="btn btn-primary" />
+                            </div>
+                        </form>
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
-                            <button type="button" class="btn btn-primary" onclick="addCycleTask()" data-dismiss="modal">Legg til</button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -215,7 +232,8 @@
     </div>
 </div>
 
-<div>
+
+<div class="row">
     @Html.ActionLink("Tilbake til " + Model.ProjectCycle.Project.ProjectName, "ViewProject", new { id = Model.ProjectCycle.Project.Unique_ProjectIdString })
 </div>
 

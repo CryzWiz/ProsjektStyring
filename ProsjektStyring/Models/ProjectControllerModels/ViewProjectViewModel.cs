@@ -10,7 +10,6 @@ namespace ProsjektStyring.Models.ProjectControllerModels
 {
     public class ViewProjectViewModel
     {
-        [Display(Name = "Prosjekt")]
         public Project Project { get; set; }
 
         [Required]

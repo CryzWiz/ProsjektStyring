@@ -12,8 +12,9 @@ namespace ProsjektStyring.Models.ProjectApiControllerModels
         public string user { get; set; }
         public string cycleTaskName { get; set; }
         public string cycleTaskDescription { get; set; }
+
         [Required]
-        [DataType(DataType.Currency)]
+        [DataType(DataType.Duration)]
         public double plannedHours { get; set; }
         public DateTime dueDate { get; set; }
     }

@@ -63,7 +63,7 @@ namespace ProsjektStyring.Data
         [Display(Name = "Oppgave registrert")]
         public DateTime TaskRegistered { get; set; }
 
-        [DataType(DataType.DateTime)]
+        [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         [Display(Name = "Frist")]
         public DateTime TaskDueDate { get; set; }
