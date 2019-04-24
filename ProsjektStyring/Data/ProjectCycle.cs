@@ -17,25 +17,41 @@ namespace ProsjektStyring.Data
         public int ProjectId { get; set; }
         public Project Project { get; set; }
 
+        [Required]
+        [StringLength(60, MinimumLength = 3)]
+        [Display(Name = "Navn")]
         public string CycleName { get; set; }
+
+        [Display(Name = "Beskrivelse")]
+        [DataType(DataType.MultilineText)]
         public string CycleDescription { get; set; }
+
+        [Display(Name = "Syklus nr")]
         public int CycleNumber { get; set; }
 
+        [Display(Name = "Aktiv")]
         public bool CycleActive { get; set; }
+        [Display(Name = "Fullført")]
         public bool CycleFinished { get; set; }
 
+        [Display(Name = "Registrert")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CycleRegistered { get; set; }
+
+        [Display(Name = "Planlagt start")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CyclePlannedStart { get; set; }
+        [Display(Name = "Startet")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CycleStart { get; set; }
+        [Display(Name = "Planlagt slutt")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CyclePlannedEnd { get; set; }
+        [Display(Name = "Fullført")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CycleEnd { get; set; }

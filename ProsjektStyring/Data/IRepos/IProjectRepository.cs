@@ -12,6 +12,10 @@ namespace ProsjektStyring.Models.IRepositorys
         // Fetchers
         Task<Project> GetProjectByUniqueId(string id);
         Task<ProjectCycle> GetProjectCycleByUniqueId(string id);
+        Task<ProjectCycleTask> GetProjectCycleTaskByUniqueId(string id);
+        Task<Project> GetProjectByUniqueId(int id);
+        Task<ProjectCycle> GetProjectCycleByUniqueId(int id);
+        Task<ProjectCycleTask> GetProjectCycleTaskByUniqueId(int id);
 
         // Projects
         Task<List<Project>> GetUnActivatedProjectsAsync();

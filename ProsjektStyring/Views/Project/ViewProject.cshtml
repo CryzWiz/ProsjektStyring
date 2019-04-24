@@ -13,11 +13,15 @@
 @* Project details *@
 <div class="row">
     <div class="container bg-light">
-        <h4 class="text-center">@Model.Project.ProjectName</h4>
+        <h4 class="text-center">
+            @Html.DisplayFor(model => model.Project.ProjectName)
+        </h4>
         <hr />
         <dl class="row">
             <dt class="col-sm-2">Prosjekt for:</dt>
-            <dd class="col-sm-4">@Model.Project.ProjectClient</dd>
+            <dd class="col-sm-4">
+                @Html.DisplayFor(model => model.Project.ProjectClient)
+            </dd>
 
             <dt class="col-sm-2">Status:</dt>
             @if (Model.Project.ProjectActive)
@@ -34,15 +38,17 @@
             }
         </dl>
         <dl class="row">
-            <dt class="col-sm-2">Planlagt start:</dt>
-            <dd class="col-sm-4">@Model.Project.ProjectPlannedStart</dd>
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Project.ProjectPlannedStart):</dt>
+            <dd class="col-sm-4">
+                @Html.DisplayFor(model => model.Project.ProjectPlannedStart)
+            </dd>
 
-            <dt class="col-sm-2">Planlagt slutt:</dt>
-            <dd class="col-sm-4">@Model.Project.ProjectPlannedEnd</dd>
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Project.ProjectPlannedEnd):</dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.Project.ProjectPlannedEnd)</dd>
         </dl>
         <dl class="row">
-            <dt class="col-sm-3">Beskrivelse:</dt>
-            <dd class="col-sm-9">@Model.Project.ProjectDescription</dd>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Project.ProjectDescription):</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Project.ProjectDescription)</dd>
         </dl>
 
     </div>

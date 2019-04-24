@@ -1,0 +1,45 @@
+﻿@model ProsjektStyring.Models.ProjectControllerModels.ViewProjectCycleTaskViewModel
+
+@{
+    ViewData["Title"] = "ViewProjectCycleTask";
+}
+
+@* error or success message *@
+@await Html.PartialAsync("../Shared/_error_msg")
+
+@* ProjectCycleTask details *@
+<div class="row">
+    <div class="container bg-light">
+        <h4 class="text-center">@Model.ProjectCycle.Project.ProjectName - @Model.ProjectCycle.CycleName - @Model.ProjectCycleTask.TaskName</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ProjectCycleTask.TaskName):</dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.ProjectCycleTask.TaskName)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ProjectCycleTask.TaskActive):</dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.ProjectCycleTask.TaskActive)</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ProjectCycleTask.ProsentageDone):</dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.ProjectCycleTask.ProsentageDone) %</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ProjectCycleTask.PlannedHours):</dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.ProjectCycleTask.PlannedHours) timer</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ProjectCycleTask.TaskRegistered):</dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.ProjectCycleTask.TaskRegistered)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ProjectCycleTask.TaskDueDate):</dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.ProjectCycleTask.TaskDueDate)</dd>
+        </dl>
+        <dl class="=row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ProjectCycleTask.TaskDescription):</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.ProjectCycleTask.TaskDescription)</dd>
+        </dl>
+    </div>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -16,29 +16,29 @@
         <h4 class="text-center">@Model.ProjectCycle.Project.ProjectName - @Model.ProjectCycle.CycleName</h4>
         <hr />
         <dl class="row">
-            <dt class="col-sm-2">Syklusnavn: </dt>
-            <dd class="col-sm-4">@Model.ProjectCycle.CycleName</dd>
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ProjectCycle.CycleName): </dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.ProjectCycle.CycleName)</dd>
 
-            <dt class="col-sm-2">Aktiv: </dt>
-            <dd class="col-sm-4">@Model.ProjectCycle.CycleActive</dd>
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ProjectCycle.CycleActive): </dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.ProjectCycle.CycleActive)</dd>
         </dl>
         <dl class="row">
-            <dt class="col-sm-2">Syklus nummer: </dt>
-            <dd class="col-sm-4">@Model.ProjectCycle.CycleNumber</dd>
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ProjectCycle.CycleNumber): </dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.ProjectCycle.CycleNumber)</dd>
 
-            <dt class="col-sm-2">Registrert:</dt>
-            <dd class="col-sm-4">@Model.ProjectCycle.CycleRegistered</dd>
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ProjectCycle.CycleRegistered):</dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.ProjectCycle.CycleRegistered)</dd>
         </dl>
         <dl class="row">
-            <dt class="col-sm-2">Planlagt start:</dt>
-            <dd class="col-sm-4">@Model.ProjectCycle.CyclePlannedStart</dd>
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ProjectCycle.CyclePlannedStart):</dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.ProjectCycle.CyclePlannedStart)</dd>
 
-            <dt class="col-sm-2">Planlagt slutt:</dt>
-            <dd class="col-sm-4">@Model.ProjectCycle.CyclePlannedEnd</dd>
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ProjectCycle.CyclePlannedEnd):</dt>
+            <dd class="col-sm-4">@Html.DisplayFor(model => model.ProjectCycle.CyclePlannedEnd)</dd>
         </dl>
         <dl class="=row">
-            <dt class="col-sm-3">Beskrivelse:</dt>
-            <dd class="col-sm-9">@Model.ProjectCycle.CycleDescription</dd>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ProjectCycle.CycleDescription):</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.ProjectCycle.CycleDescription)</dd>
         </dl>
     </div>
 </div>

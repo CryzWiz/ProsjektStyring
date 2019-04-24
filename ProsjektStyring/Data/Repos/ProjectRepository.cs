@@ -69,7 +69,12 @@ namespace ProsjektStyring.Models.Repositorys
             return projects;
         }
 
-        // Getters for Project, ProjectCycle and ProjectCycleTask by unique id string
+        // Getters for Project, ProjectCycle and ProjectCycleTask by unique id string and id
+        // UniqueId methods returns all containing underclasses 
+        // -> Project inluces Cycles and Comments. 
+        // -> ProjectCycles includes Tasks and Comments
+        // -> ProjectCycleTasks includes Comments
+        // Fetching by int ID only returns single entity
         public async Task<Project> GetProjectByUniqueId(string id)
         {
             var project = await Task.Run(() => _db.Project.Include("ProjectCycles").Include("ProjectComments").FirstOrDefault(x => x.Unique_ProjectIdString == id));
@@ -84,7 +89,24 @@ namespace ProsjektStyring.Models.Repositorys
         }
         public async Task<ProjectCycleTask> GetProjectCycleTaskByUniqueId(string id)
         {
-            ProjectCycleTask task = await _db.ProjectCycleTask.FirstOrDefaultAsync(x => x.Unique_TaskIdString == id);
+            ProjectCycleTask task = await _db.ProjectCycleTask.Include("ProjectTaskComments").FirstOrDefaultAsync(x => x.Unique_TaskIdString == id);
+            return task;
+        }
+        public async Task<Project> GetProjectByUniqueId(int id)
+        {
+            var project = await Task.Run(() => _db.Project.FirstOrDefault(x => x.ProjectId == id));
+            return project;
+        }
+        public async Task<ProjectCycle> GetProjectCycleByUniqueId(int id)
+        {
+            var cycle = await _db.ProjectCycle.FirstOrDefaultAsync(x => x.ProjectCycleId == id);
+            var p = await _db.Project.FirstOrDefaultAsync(x => x.ProjectId == cycle.ProjectId);
+            cycle.Project = p;
+            return cycle;
+        }
+        public async Task<ProjectCycleTask> GetProjectCycleTaskByUniqueId(int id)
+        {
+            ProjectCycleTask task = await _db.ProjectCycleTask.FirstOrDefaultAsync(x => x.ProjectCycleTaskId == id);
             return task;
         }
 

@@ -151,6 +151,25 @@ namespace ProsjektStyring.Controllers
 
         }
 
+        [HttpGet]
+        [Route("Project/ViewProjectCycleTask/{id}")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
+        public async Task<IActionResult> ViewProjectCycleTask(string id)
+        {
+            ProjectCycleTask t = await _projectRepository.GetProjectCycleTaskByUniqueId(id);
+            ProjectCycle c = await _projectRepository.GetProjectCycleByUniqueId(t.ProjectCycleId);
+            Project p = await _projectRepository.GetProjectByUniqueId(c.ProjectId);
+
+            ViewProjectCycleTaskViewModel model = new ViewProjectCycleTaskViewModel
+            {
+                ProjectCycleTask = t,
+                ProjectCycle = c,
+                Project = p
+            };
+
+            return View(model);
+        }
+
 
 
     }
