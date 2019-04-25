@@ -28,12 +28,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProjectPlannedStart" class="control-label"></label>
-                <input asp-for="ProjectPlannedStart" class="form-control" />
+                <input asp-for="ProjectPlannedStart" class="form-control" value="@DateTime.Now" />
                 <span asp-validation-for="ProjectPlannedStart" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProjectPlannedEnd" class="control-label"></label>
-                <input asp-for="ProjectPlannedEnd" class="form-control" />
+                <input asp-for="ProjectPlannedEnd" class="form-control" value="@DateTime.Now"/>
                 <span asp-validation-for="ProjectPlannedEnd" class="text-danger"></span>
             </div>
             <div class="form-group">

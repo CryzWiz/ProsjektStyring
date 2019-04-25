@@ -26,17 +26,23 @@
         <tbody>
             @foreach (var item in Model.UnActivatedProjects)
             {
-                <tr>
-                    <td>@item.ProjectName</td>
-                    <td>@item.ProjectRegistered</td>
-                    <td>@item.ProjectPlannedStart</td>
-                    <td>@item.ProjectPlannedEnd</td>
-                    <td>
-                        @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }) |
-                        @Html.ActionLink("Slett", "Delete", new { /* id=item.PrimaryKey */ })
-                    </td>
-                </tr>
+            <tr>
+                <td>@Html.DisplayFor(model => item.ProjectName)</td>
+                <td>@Html.DisplayFor(model => item.ProjectRegistered)</td>
+                <td>@Html.DisplayFor(model => item.ProjectPlannedStart)</td>
+                <td>@Html.DisplayFor(model => item.ProjectPlannedEnd)</td>
+                <td>
+                    @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }, new { @class = "btn btn-success" })
+
+                    @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-warning" })
+
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirm"
+                            data-id="@item.Unique_ProjectIdString" data-name="@item.ProjectName">
+                        Slett
+                    </button>
+
+                </td>
+            </tr>
             }
         </tbody>
     </table>
@@ -59,17 +65,22 @@
         <tbody>
             @foreach (var item in Model.ActiveProjects)
             {
-                <tr>
-                    <td>@item.ProjectName</td>
-                    <td>@item.ProjectRegistered</td>
-                    <td>@item.ProjectPlannedStart</td>
-                    <td>@item.ProjectPlannedEnd</td>
-                    <td>
-                        @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }) |
-                        @Html.ActionLink("Slett", "Delete", new { /* id=item.PrimaryKey */ })
-                    </td>
-                </tr>
+            <tr>
+                <td>@Html.DisplayFor(model => item.ProjectName)</td>
+                <td>@Html.DisplayFor(model => item.ProjectRegistered)</td>
+                <td>@Html.DisplayFor(model => item.ProjectPlannedStart)</td>
+                <td>@Html.DisplayFor(model => item.ProjectPlannedEnd)</td>
+                <td>
+                    @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }, new { @class = "btn btn-success" })
+
+                    @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-warning" })
+
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirm"
+                            data-id="@item.Unique_ProjectIdString" data-name="@item.ProjectName">
+                        Slett
+                    </button>
+                </td>
+            </tr>
             }
         </tbody>
     </table>
@@ -92,20 +103,49 @@
         <tbody>
             @foreach (var item in Model.CompletedProjects)
             {
-                <tr>
-                    <td>@item.ProjectName</td>
-                    <td>@item.ProjectRegistered</td>
-                    <td>@item.ProjectPlannedStart</td>
-                    <td>@item.ProjectPlannedEnd</td>
-                    <td>
-                        @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }) |
-                        @Html.ActionLink("Slett", "Delete", new { /* id=item.PrimaryKey */ })
-                    </td>
-                </tr>
+            <tr>
+                <td>@Html.DisplayFor(model => item.ProjectName)</td>
+                <td>@Html.DisplayFor(model => item.ProjectRegistered)</td>
+                <td>@Html.DisplayFor(model => item.ProjectPlannedStart)</td>
+                <td>@Html.DisplayFor(model => item.ProjectPlannedEnd)</td>
+                <td>
+                    @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }, new { @class = "btn btn-success" })
+
+                    @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-warning" })
+
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirm"
+                            data-id="@item.Unique_ProjectIdString" data-name="@item.ProjectName">
+                        Slett
+                    </button>
+                </td>
+            </tr>
             }
         </tbody>
     </table>
+</div>
+
+
+@* Delete confirm modal *@
+<div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Er du sikker?</p>
+                <p>Du vil nå slette Prosjektet og all tilhørende data.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+                <a href="" class="btn btn-danger" id="deleteProjectBtn">Slett</a>
+
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -134,5 +174,19 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        $('#deleteConfirm').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var id = button.data('id') // Extract info from data-* attributes
+            var name = button.data('name') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-title').text('Slette "' + name + '"')
+            modal.find('#projectId').val(id)
+            $('#deleteProjectBtn').attr("href", "Project/DeleteProject/" + id)
+        })
     </script>
 }

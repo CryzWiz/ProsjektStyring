@@ -24,7 +24,7 @@ namespace ProsjektStyring.Controllers
             _userManager = uM;
         }
 
-        /// GET ///
+        ////////    Index     ////////
         [HttpGet]
         [Route("Project/")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
@@ -39,6 +39,7 @@ namespace ProsjektStyring.Controllers
             return View(model);
         }
 
+        ////////    Project-functions     ////////
         [HttpGet]
         [Route("Project/{id}")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
@@ -54,21 +55,6 @@ namespace ProsjektStyring.Controllers
         }
 
         [HttpGet]
-        [Route("Project/ViewProjectCycle/{id}")]
-        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
-        public async Task<IActionResult> ViewProjectCycle(string id)
-        {
-            ProjectCycle c = await _projectRepository.GetProjectCycleByUniqueId(id);
-
-            ViewProjectCycleViewModel model = new ViewProjectCycleViewModel
-            {
-                ProjectCycle = c
-            };
-
-            return View(model);
-        }
-
-        [HttpGet]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public IActionResult CreateProject()
         {
@@ -76,27 +62,6 @@ namespace ProsjektStyring.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        [Route("Project/ViewProjectCycleTask/{id}")]
-        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
-        public async Task<IActionResult> ViewProjectCycleTask(string id)
-        {
-            ProjectCycleTask t = await _projectRepository.GetProjectCycleTaskByUniqueId(id);
-            ProjectCycle c = await _projectRepository.GetProjectCycleByUniqueId(t.ProjectCycleId);
-            Project p = await _projectRepository.GetProjectByUniqueId(c.ProjectId);
-
-            ViewProjectCycleTaskViewModel model = new ViewProjectCycleTaskViewModel
-            {
-                ProjectCycleTask = t,
-                ProjectCycle = c,
-                Project = p
-            };
-
-            return View(model);
-        }
-
-
-        /// POST ///
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
@@ -134,6 +99,48 @@ namespace ProsjektStyring.Controllers
                 return RedirectToAction("Index", null);
             }
 
+        }
+
+        [HttpGet]
+        [Route("Project/DeleteProject/{id}")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> DeleteProject([FromRoute] string id)
+        {
+            if (id != null)
+            {
+                string name = await _projectRepository.DeleteProjectAsync(id);
+                if (name != null)
+                {
+                    TempData["success"] = string.Format("Prosjekt {0} er slettet!", name);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = string.Format("Prosjekt {0} er ikke slettet!", name);
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                TempData["error"] = string.Format("Noe gikk galt. Kontakt teknisk support om det fortsetter.");
+                return RedirectToAction("Index");
+            }
+        }
+
+        ////////    ProjectCycle-functions     ////////
+        [HttpGet]
+        [Route("Project/ViewProjectCycle/{id}")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
+        public async Task<IActionResult> ViewProjectCycle([FromRoute] string id)
+        {
+            ProjectCycle c = await _projectRepository.GetProjectCycleByUniqueId(id);
+
+            ViewProjectCycleViewModel model = new ViewProjectCycleViewModel
+            {
+                ProjectCycle = c
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -174,7 +181,53 @@ namespace ProsjektStyring.Controllers
             }
 
         }
-        
+
+        [HttpGet]
+        [Route("Project/DeleteProjectCycle/{id}")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> DeleteProjectCycle([FromRoute] string id)
+        {
+            if (id != null)
+            {
+                string projectUniqueId = await _projectRepository.DeleteProjectCycleAsync(id);
+                if (projectUniqueId != null)
+                {
+                    TempData["success"] = string.Format("Syklus ble slettet!");
+                    return RedirectToAction("Project", new { id = projectUniqueId });
+                }
+                else
+                {
+                    TempData["error"] = string.Format("Syklus ble ikke slettet!");
+                    return RedirectToAction("Project", new { id = projectUniqueId });
+                }
+            }
+            else
+            {
+                TempData["error"] = string.Format("Noe gikk galt. Kontakt teknisk support om det fortsetter.");
+                return RedirectToAction("Index");
+            }
+        }
+
+        ////////    ProjectCycleTask-functions    ////////
+        [HttpGet]
+        [Route("Project/ViewProjectCycleTask/{id}")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
+        public async Task<IActionResult> ViewProjectCycleTask([FromRoute] string id)
+        {
+            ProjectCycleTask t = await _projectRepository.GetProjectCycleTaskByUniqueId(id);
+            ProjectCycle c = await _projectRepository.GetProjectCycleByUniqueId(t.ProjectCycleId);
+            Project p = await _projectRepository.GetProjectByUniqueId(c.ProjectId);
+
+            ViewProjectCycleTaskViewModel model = new ViewProjectCycleTaskViewModel
+            {
+                ProjectCycleTask = t,
+                ProjectCycle = c,
+                Project = p
+            };
+
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
@@ -213,6 +266,38 @@ namespace ProsjektStyring.Controllers
             }
 
         }
+
+        [HttpGet]
+        [Route("Project/DeleteProjectCycleTask/{id}")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> DeleteProjectCycleTask([FromRoute] string id)
+        {
+            if (id != null)
+            {
+                string cycleUniqueId = await _projectRepository.DeleteProjectCycleTaskAsync(id);
+                if (cycleUniqueId != null)
+                {
+                    TempData["success"] = string.Format("Oppgaven ble slettet!");
+                    return RedirectToAction("Project/ViewProjectCycle", new { id = cycleUniqueId });
+                }
+                else
+                {
+                    TempData["error"] = string.Format("Oppgaven ble ikke slettet!");
+                    return RedirectToAction("Project/ViewProjectCycle", new { id = cycleUniqueId });
+                }
+            }
+            else
+            {
+                TempData["error"] = string.Format("Noe gikk galt. Kontakt teknisk support om det fortsetter.");
+                return RedirectToAction("Index");
+            }
+        }
+
+        
+
+        
+        
+        
 
     }
 }
