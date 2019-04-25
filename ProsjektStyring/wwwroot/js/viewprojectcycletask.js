@@ -4,11 +4,11 @@ function addComment() {
     var ch = document.getElementById("CommentHeadline").value;
     var ct = document.getElementById("CommentText").value;
     var pid = document.getElementById("CCycleTaskId").value;
-    AddProjectCycleComment(user, pid, ch, ct);
+    AddProjectCycleTaskComment(user, pid, ch, ct);
 }
 
 
-function AddProjectCycleComment(u, pid, ch, ct) {
+function AddProjectCycleTaskComment(u, pid, ch, ct) {
     var request = new XMLHttpRequest();
     var data = {
         "projectCycleTaskId": pid,
