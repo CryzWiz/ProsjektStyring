@@ -21,15 +21,24 @@ namespace ProsjektStyring.Models.SeedData
             {
                 await CreateRolesAsync(context, rM);
             }
-            // If we dont have a user, create a admin
+            // If we dont have a user, create some
             if (!context.Users.Any())
             {
                 await CreateAdminAsync(context, uM);
+                await CreateTeamLeader(context, uM);
+                await CreateUser(context, uM);
+                await CreateMember(context, uM);
+            }
+
+            if (!context.Project.Any())
+            {
+                await CreateProject(context, uM);
+                await AddComments(context, uM);
             }
         }
 
         /**
-         * Create a admin - Using my own email
+         * Create users, one for each Role
          */
         private static async Task CreateAdminAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
@@ -39,6 +48,57 @@ namespace ProsjektStyring.Models.SeedData
             {
                 UserName = "admin@admin.com",
                 Email = "admin@admin.com"
+            };
+
+            await uM.CreateAsync(admin, "Password@123");
+            context.SaveChanges();
+            // Add admin to Administrator-role
+            var aU = await uM.FindByEmailAsync(admin.Email);
+            await uM.AddToRoleAsync(aU, RoleOptions.AdminRole);
+            await context.SaveChangesAsync();
+        }
+        private static async Task CreateTeamLeader(ApplicationDbContext context, UserManager<ApplicationUser> uM)
+        {
+            // Add a admin
+            DateTime regdate = DateTime.Now;
+            var admin = new ApplicationUser
+            {
+                UserName = "teamleader@teamleader.com",
+                Email = "teamleader@teamleader.com"
+            };
+
+            await uM.CreateAsync(admin, "Password@123");
+            context.SaveChanges();
+            // Add admin to Administrator-role
+            var aU = await uM.FindByEmailAsync(admin.Email);
+            await uM.AddToRoleAsync(aU, RoleOptions.AdminRole);
+            await context.SaveChangesAsync();
+        }
+        private static async Task CreateUser(ApplicationDbContext context, UserManager<ApplicationUser> uM)
+        {
+            // Add a admin
+            DateTime regdate = DateTime.Now;
+            var admin = new ApplicationUser
+            {
+                UserName = "user@user.com",
+                Email = "user@user.com"
+            };
+
+            await uM.CreateAsync(admin, "Password@123");
+            context.SaveChanges();
+            // Add admin to Administrator-role
+            var aU = await uM.FindByEmailAsync(admin.Email);
+            await uM.AddToRoleAsync(aU, RoleOptions.AdminRole);
+            await context.SaveChangesAsync();
+        }
+        private static async Task CreateMember(ApplicationDbContext context, UserManager<ApplicationUser> uM)
+        {
+            // Add a admin
+            DateTime regdate = DateTime.Now;
+            var admin = new ApplicationUser
+            {
+                UserName = "member@member.com",
+                Email = "member@member.com"
             };
 
             await uM.CreateAsync(admin, "Password@123");
@@ -63,5 +123,97 @@ namespace ProsjektStyring.Models.SeedData
             await rM.CreateAsync(new IdentityRole(RoleOptions.TeamLeaderRole));
             await context.SaveChangesAsync();
         }
+
+        /**
+         * Create a project with a cycle and a task. And some comments for 
+         * each of them.
+         */
+         private static async Task CreateProject(ApplicationDbContext context, UserManager<ApplicationUser> uM)
+        {
+
+            Project initProject = new Project { };
+            p.ProjectName = "Testprosjekt";
+            p.ProjectClient = "allanarnesen.com";
+            p.ProjectDescription = "Test-prosjekt. Opprettet av SeedData";
+            p.ProjectPlannedStart = DateTime.Now;
+            p.ProjectPlannedEnd = DateTime.Now.AddDays(30);
+            p.ProjectCreatedByUser = "admin@admin.com";
+
+            p.ProjectRegistered = DateTime.Now;
+            p.Unique_ProjectIdString = "ecampleprojectguid";
+
+            ProjectCycle initCycle = new ProjectCycle
+            {
+                CycleName = "Mine Oppgaver",
+                CycleRegistered = DateTime.Now,
+                Unique_CycleIdString = "examplecycleguid",
+                CycleNumber = 1,
+                CyclePlannedStart = DateTime.Now,
+                CyclePlannedEnd = DateTime.Now.AddDays(30),
+                CycleDescription = "Test-syklus. Opprettet av SeedData"
+            };
+
+            ProjectCycleTask initTask = new ProjectCycleTask { 
+                ProjectCycleId = 1,
+                TaskActive = false,
+                TaskDescription = "Test-oppgave. Opprettet av SeedData",
+                TaskName = "TestOppgave",
+                PlannedHours = 4.5,
+                TaskCompleted = false,
+                TotalHoursSpent = 0.0,
+                TaskRegistered = DateTime.Now,
+                TaskDueDate = DateTime.Now.AddDays(15),
+                Unique_TaskIdString = "exampletaskguid"
+            };
+            initCycle.ProjectCycleTasks.Add(initTask);
+            initProject.ProjectCycles.Add(initCycle);
+            context.AddRange(initProject);
+            await context.SaveChangesAsync();
+
+        }
+
+        /**
+         * Create a init comment to the project, projectcycle and the projectcycletask.
+         */
+        private static async Task AddComments(ApplicationDbContext context, UserManager<ApplicationUser> uM)
+        {
+            ProjectComment initProjectComment = new ProjectComment
+            {
+                CommentRegistered = DateTime.Now,
+                ByUser = "admin@admin.com",
+                Comment = "Opprettet av SeedData",
+                CommentHeading = "Testkommentar",
+                ProjectId = 1,
+                Unique_IdString = "exampleprojectcommentguid"
+            };
+            context.Add(initProjectComment);
+            await context.SaveChangesAsync();
+
+            ProjectCycleComment initCycleComment = new ProjectCycleComment
+            {
+                CommentRegistered = DateTime.Now,
+                ByUser = "admin@admin.com",
+                Comment = "Opprettet av SeedData",
+                CommentHeading = "Testkommentar",
+                ProjectCycleId = 1,
+                Unique_IdString = "exampleprojecttaskcommentguid"
+            };
+            context.Add(initCycleComment);
+            await context.SaveChangesAsync();
+
+            ProjectCycleTaskComment initTaskComment = new ProjectCycleTaskComment
+            {
+                CommentRegistered = DateTime.Now,
+                ByUser = "admin@admin.com",
+                Comment = "Opprettet av SeedData",
+                CommentHeading = "Testkommentar",
+                ProjectCycleTaskId = 1,
+                Unique_IdString = "exampleprojectcycletaskcommentguid"
+            };
+            context.Add(initTaskComment);
+            await context.SaveChangesAsync();
+        }
+
+
     }
 }
