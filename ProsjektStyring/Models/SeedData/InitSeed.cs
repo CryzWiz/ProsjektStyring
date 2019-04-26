@@ -131,18 +131,18 @@ namespace ProsjektStyring.Models.SeedData
          private static async Task CreateProject(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
 
-            Project initProject = new Project { };
-            p.ProjectName = "Testprosjekt";
-            p.ProjectClient = "allanarnesen.com";
-            p.ProjectDescription = "Test-prosjekt. Opprettet av SeedData";
-            p.ProjectPlannedStart = DateTime.Now;
-            p.ProjectPlannedEnd = DateTime.Now.AddDays(30);
-            p.ProjectCreatedByUser = "admin@admin.com";
+            Project initProject = new Project { 
+                ProjectName = "Testprosjekt",
+                ProjectClient = "allanarnesen.com",
+                ProjectDescription = "Test-prosjekt. Opprettet av SeedData",
+                ProjectPlannedStart = DateTime.Now,
+                ProjectPlannedEnd = DateTime.Now.AddDays(30),
+                ProjectCreatedByUser = "admin@admin.com",
+                ProjectRegistered = DateTime.Now,
+                Unique_ProjectIdString = "exampleprojectguid"
+            };
 
-            p.ProjectRegistered = DateTime.Now;
-            p.Unique_ProjectIdString = "ecampleprojectguid";
-
-            ProjectCycle initCycle = new ProjectCycle
+    ProjectCycle initCycle = new ProjectCycle
             {
                 CycleName = "Mine Oppgaver",
                 CycleRegistered = DateTime.Now,
