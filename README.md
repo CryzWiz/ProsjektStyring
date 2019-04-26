@@ -25,8 +25,9 @@ Evvery project should track spent time vs planned time, and estimated time to co
  - Since its a hobby project to pass time, there will be little to no css. Basic bootstrap design.
 
 ##  Currents status:
-Still implementing Projects, projectcycles, projectcyclestasks, and projectcomments, projectcyclecomments and projectcycletaskcomments and
-all corresponding functions (add, edit, create, delete).
+*	Basic functions for creating, deleting or updating Project, ProjectCycle and ProjectCycleTask are in place. Possibility to post commet to each is also implemented. 
+*	Next is to create tables for teams, and link teams to projects. Then create tables for some sort of hour
+registration towards every task from users. And diverse access to users belonging to teams assosiated with given project.
 
 ##  Future upgrade ideas:
 - Include signalR for realtime update to all connected clients on update in projectdetails
