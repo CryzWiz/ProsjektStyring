@@ -42,70 +42,63 @@ namespace ProsjektStyring.Models.SeedData
          */
         private static async Task CreateAdminAsync(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
-            // Add a admin
             DateTime regdate = DateTime.Now;
             var admin = new ApplicationUser
             {
                 UserName = "admin@admin.com",
                 Email = "admin@admin.com"
             };
-
             await uM.CreateAsync(admin, "Password@123");
             context.SaveChanges();
-            // Add admin to Administrator-role
+
             var aU = await uM.FindByEmailAsync(admin.Email);
             await uM.AddToRoleAsync(aU, RoleOptions.AdminRole);
             await context.SaveChangesAsync();
         }
         private static async Task CreateTeamLeader(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
-            // Add a admin
             DateTime regdate = DateTime.Now;
-            var admin = new ApplicationUser
+            var teamleder = new ApplicationUser
             {
                 UserName = "teamleader@teamleader.com",
                 Email = "teamleader@teamleader.com"
             };
-
-            await uM.CreateAsync(admin, "Password@123");
+            await uM.CreateAsync(teamleder, "Password@123");
             context.SaveChanges();
-            // Add admin to Administrator-role
-            var aU = await uM.FindByEmailAsync(admin.Email);
-            await uM.AddToRoleAsync(aU, RoleOptions.AdminRole);
+            var aU = await uM.FindByEmailAsync(teamleder.Email);
+            await uM.AddToRoleAsync(aU, RoleOptions.TeamLeaderRole);
             await context.SaveChangesAsync();
         }
         private static async Task CreateUser(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
-            // Add a admin
             DateTime regdate = DateTime.Now;
-            var admin = new ApplicationUser
+            var user = new ApplicationUser
             {
                 UserName = "user@user.com",
                 Email = "user@user.com"
             };
 
-            await uM.CreateAsync(admin, "Password@123");
+            await uM.CreateAsync(user, "Password@123");
             context.SaveChanges();
-            // Add admin to Administrator-role
-            var aU = await uM.FindByEmailAsync(admin.Email);
-            await uM.AddToRoleAsync(aU, RoleOptions.AdminRole);
+
+            var aU = await uM.FindByEmailAsync(user.Email);
+            await uM.AddToRoleAsync(aU, RoleOptions.UserRole);
             await context.SaveChangesAsync();
         }
         private static async Task CreateMember(ApplicationDbContext context, UserManager<ApplicationUser> uM)
         {
-            // Add a admin
             DateTime regdate = DateTime.Now;
-            var admin = new ApplicationUser
+            var member = new ApplicationUser
             {
                 UserName = "member@member.com",
                 Email = "member@member.com"
             };
 
-            await uM.CreateAsync(admin, "Password@123");
+            await uM.CreateAsync(member, "Password@123");
             context.SaveChanges();
-            // Add admin to Administrator-role
-            var aU = await uM.FindByEmailAsync(admin.Email);
-            await uM.AddToRoleAsync(aU, RoleOptions.AdminRole);
+
+            var aU = await uM.FindByEmailAsync(member.Email);
+            await uM.AddToRoleAsync(aU, RoleOptions.MemberRole);
             await context.SaveChangesAsync();
         }
 
@@ -142,7 +135,7 @@ namespace ProsjektStyring.Models.SeedData
                 Unique_ProjectIdString = "exampleprojectguid"
             };
 
-    ProjectCycle initCycle = new ProjectCycle
+            ProjectCycle initCycle = new ProjectCycle
             {
                 CycleName = "Mine Oppgaver",
                 CycleRegistered = DateTime.Now,
@@ -196,7 +189,7 @@ namespace ProsjektStyring.Models.SeedData
                 Comment = "Opprettet av SeedData",
                 CommentHeading = "Testkommentar",
                 ProjectCycleId = 1,
-                Unique_IdString = "exampleprojecttaskcommentguid"
+                Unique_IdString = "exampleprojectcyclecommentguid"
             };
             context.Add(initCycleComment);
             await context.SaveChangesAsync();
