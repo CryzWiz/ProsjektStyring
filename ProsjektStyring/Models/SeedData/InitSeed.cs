@@ -10,7 +10,15 @@ namespace ProsjektStyring.Models.SeedData
     public class InitSeed
     {
         /**
-         * Initialize the db with some starter data
+         * Initialize the db with some starter data.
+         * For a production setting, comment out everything except:
+         * - CreateRolesAsync()
+         * - CreateAdminAsync()
+         * 
+         * These are needed for:
+         * a) The site to run
+         * b) For you to have some way of accessing it as admin
+         * 
          */
         public static async Task InitializeAsync(ApplicationDbContext context,
             UserManager<ApplicationUser> uM,
@@ -29,10 +37,12 @@ namespace ProsjektStyring.Models.SeedData
                 await CreateUser(context, uM);
                 await CreateMember(context, uM);
             }
-
+            // If we dont have any projects, create one
             if (!context.Project.Any())
             {
+                // Add Project, ProjectCycle and a ProjectCycleTask
                 await CreateProject(context, uM);
+                // Create a init commet for each of them
                 await AddComments(context, uM);
             }
         }
@@ -46,7 +56,11 @@ namespace ProsjektStyring.Models.SeedData
             var admin = new ApplicationUser
             {
                 UserName = "admin@admin.com",
-                Email = "admin@admin.com"
+                Email = "admin@admin.com",
+                FirstName = "Admin",
+                LastName = "Adminson",
+                Active = true,
+                RegistrationDate = DateTime.Now
             };
             await uM.CreateAsync(admin, "Password@123");
             context.SaveChanges();
@@ -61,7 +75,11 @@ namespace ProsjektStyring.Models.SeedData
             var teamleder = new ApplicationUser
             {
                 UserName = "teamleader@teamleader.com",
-                Email = "teamleader@teamleader.com"
+                Email = "teamleader@teamleader.com",
+                FirstName = "Teamleader",
+                LastName = "Teamleaderson",
+                Active = true,
+                RegistrationDate = DateTime.Now
             };
             await uM.CreateAsync(teamleder, "Password@123");
             context.SaveChanges();
@@ -75,7 +93,11 @@ namespace ProsjektStyring.Models.SeedData
             var user = new ApplicationUser
             {
                 UserName = "user@user.com",
-                Email = "user@user.com"
+                Email = "user@user.com",
+                FirstName = "User",
+                LastName = "Userson",
+                Active = true,
+                RegistrationDate = DateTime.Now
             };
 
             await uM.CreateAsync(user, "Password@123");
@@ -91,7 +113,11 @@ namespace ProsjektStyring.Models.SeedData
             var member = new ApplicationUser
             {
                 UserName = "member@member.com",
-                Email = "member@member.com"
+                Email = "member@member.com",
+                FirstName = "Member",
+                LastName = "Memberson",
+                Active = true,
+                RegistrationDate = DateTime.Now
             };
 
             await uM.CreateAsync(member, "Password@123");
@@ -132,23 +158,32 @@ namespace ProsjektStyring.Models.SeedData
                 ProjectPlannedEnd = DateTime.Now.AddDays(30),
                 ProjectCreatedByUser = "admin@admin.com",
                 ProjectRegistered = DateTime.Now,
-                Unique_ProjectIdString = "exampleprojectguid"
+                Unique_ProjectIdString = "exampleprojectguid",
+                NumberOfProjectCycles = 1,
+                ProjectActive = true,
+                ProjectStart = DateTime.Now
             };
+            context.Add(initProject);
+            await context.SaveChangesAsync();
 
             ProjectCycle initCycle = new ProjectCycle
             {
-                CycleName = "Mine Oppgaver",
+                CycleName = "TestSyklus",
                 CycleRegistered = DateTime.Now,
                 Unique_CycleIdString = "examplecycleguid",
                 CycleNumber = 1,
                 CyclePlannedStart = DateTime.Now,
                 CyclePlannedEnd = DateTime.Now.AddDays(30),
-                CycleDescription = "Test-syklus. Opprettet av SeedData"
+                CycleDescription = "Test-syklus. Opprettet av SeedData",
+                ProjectId = 1,
+                CycleActive = true,
+                CycleStart = DateTime.Now
             };
+            context.Add(initCycle);
+            await context.SaveChangesAsync();
 
             ProjectCycleTask initTask = new ProjectCycleTask { 
-                ProjectCycleId = 1,
-                TaskActive = false,
+                TaskActive = true,
                 TaskDescription = "Test-oppgave. Opprettet av SeedData",
                 TaskName = "TestOppgave",
                 PlannedHours = 4.5,
@@ -156,11 +191,11 @@ namespace ProsjektStyring.Models.SeedData
                 TotalHoursSpent = 0.0,
                 TaskRegistered = DateTime.Now,
                 TaskDueDate = DateTime.Now.AddDays(15),
-                Unique_TaskIdString = "exampletaskguid"
+                Unique_TaskIdString = "exampletaskguid",
+                ProjectCycleId = 1               
             };
-            initCycle.ProjectCycleTasks.Add(initTask);
-            initProject.ProjectCycles.Add(initCycle);
-            context.AddRange(initProject);
+
+            context.Add(initTask);
             await context.SaveChangesAsync();
 
         }
