@@ -1,16 +1,19 @@
-﻿@model ProsjektStyring.Models.ProjectControllerModels.CreateProjectViewModel
+﻿@model ProsjektStyring.Models.ProjectControllerModels.EditProjectViewModel
 
 @{
-    ViewData["Title"] = "Opprett prosjekt";
+    ViewData["Title"] = "Oppdater " + Model.ProjectName;
 }
 
-<h1>Opprett et nytt prosjekt</h1>
-
+<h4>Oppdater prosjektdata for "@Html.DisplayFor(model => model.ProjectName)"</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateProject">
+        <form asp-action="EditProject">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Unique_ProjectIdString" class="form-control" hidden/>
+                <span asp-validation-for="Unique_ProjectIdString" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="ProjectName" class="control-label"></label>
                 <input asp-for="ProjectName" class="form-control" />
@@ -23,21 +26,31 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProjectDescription" class="control-label"></label>
-                <input asp-for="ProjectDescription" class="form-control" />
+                <textarea asp-for="ProjectDescription" class="form-control" rows="6"></textarea>
                 <span asp-validation-for="ProjectDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ProjectActive" /> @Html.DisplayNameFor(model => model.ProjectActive)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ProjectCompleted" /> @Html.DisplayNameFor(model => model.ProjectCompleted)
+                </label>
             </div>
             <div class="form-group">
                 <label asp-for="ProjectPlannedStart" class="control-label"></label>
-                <input asp-for="ProjectPlannedStart" class="form-control" value="@DateTime.Now" />
+                <input asp-for="ProjectPlannedStart" class="form-control" />
                 <span asp-validation-for="ProjectPlannedStart" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProjectPlannedEnd" class="control-label"></label>
-                <input asp-for="ProjectPlannedEnd" class="form-control" value="@DateTime.Now"/>
+                <input asp-for="ProjectPlannedEnd" class="form-control" />
                 <span asp-validation-for="ProjectPlannedEnd" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Opprett" class="btn btn-primary" />
+                <input type="submit" value="Oppdater" class="btn btn-primary" />
             </div>
         </form>
     </div>

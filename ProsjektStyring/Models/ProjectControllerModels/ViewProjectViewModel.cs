@@ -14,9 +14,6 @@ namespace ProsjektStyring.Models.ProjectControllerModels
 
         [Required(ErrorMessage = "Prosjekt-id mangler")]
         public string projectId { get; set; }
-        [Required(ErrorMessage = "Brukernavn mangler")]
-        [Display(Name = "Bruker")]
-        public string user { get; set; }
 
         [Required(ErrorMessage = "Navn for syklusen må fylles inn")]
         [Display(Name = "Syklus navn")]

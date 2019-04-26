@@ -6,11 +6,13 @@
 
 @* error or success message *@
 @await Html.PartialAsync("../Shared/_error_msg")
+
 <h1>Prosjekter</h1>
 
 <p>
     <a asp-action="CreateProject">Opprett nytt prosjekt</a>
 </p>
+@* Not started Projects *@
 <div class="container bg-light">
     <h4 class="text-center">Ikke påbegynte prosjekter</h4>
     <table class="table table-hover" id="notStartedProjects">
@@ -26,23 +28,23 @@
         <tbody>
             @foreach (var item in Model.UnActivatedProjects)
             {
-            <tr>
-                <td>@Html.DisplayFor(model => item.ProjectName)</td>
-                <td>@Html.DisplayFor(model => item.ProjectRegistered)</td>
-                <td>@Html.DisplayFor(model => item.ProjectPlannedStart)</td>
-                <td>@Html.DisplayFor(model => item.ProjectPlannedEnd)</td>
-                <td>
-                    @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }, new { @class = "btn btn-success" })
+                <tr>
+                    <td>@Html.DisplayFor(model => item.ProjectName)</td>
+                    <td>@Html.DisplayFor(model => item.ProjectRegistered)</td>
+                    <td>@Html.DisplayFor(model => item.ProjectPlannedStart)</td>
+                    <td>@Html.DisplayFor(model => item.ProjectPlannedEnd)</td>
+                    <td>
+                        @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }, new { @class = "btn btn-success" })
 
-                    @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-warning" })
+                        @Html.ActionLink("Endre", "EditProject", new { id = item.Unique_ProjectIdString }, new { @class = "btn btn-warning" })
 
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirm"
-                            data-id="@item.Unique_ProjectIdString" data-name="@item.ProjectName">
-                        Slett
-                    </button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirm"
+                                data-id="@item.Unique_ProjectIdString" data-name="@item.ProjectName">
+                            Slett
+                        </button>
 
-                </td>
-            </tr>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -50,6 +52,7 @@
 <br />
 <hr />
 <br />
+@* Active Projects *@
 <div class="container bg-light">
     <h4 class="text-center">Aktive Prosjekter</h4>
     <table class="table table-hover" id="activeProjects">
@@ -65,22 +68,22 @@
         <tbody>
             @foreach (var item in Model.ActiveProjects)
             {
-            <tr>
-                <td>@Html.DisplayFor(model => item.ProjectName)</td>
-                <td>@Html.DisplayFor(model => item.ProjectRegistered)</td>
-                <td>@Html.DisplayFor(model => item.ProjectPlannedStart)</td>
-                <td>@Html.DisplayFor(model => item.ProjectPlannedEnd)</td>
-                <td>
-                    @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }, new { @class = "btn btn-success" })
+                <tr>
+                    <td>@Html.DisplayFor(model => item.ProjectName)</td>
+                    <td>@Html.DisplayFor(model => item.ProjectRegistered)</td>
+                    <td>@Html.DisplayFor(model => item.ProjectPlannedStart)</td>
+                    <td>@Html.DisplayFor(model => item.ProjectPlannedEnd)</td>
+                    <td>
+                        @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }, new { @class = "btn btn-success" })
 
-                    @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-warning" })
+                        @Html.ActionLink("Endre", "EditProject", new { id = item.Unique_ProjectIdString }, new { @class = "btn btn-warning" })
 
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirm"
-                            data-id="@item.Unique_ProjectIdString" data-name="@item.ProjectName">
-                        Slett
-                    </button>
-                </td>
-            </tr>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirm"
+                                data-id="@item.Unique_ProjectIdString" data-name="@item.ProjectName">
+                            Slett
+                        </button>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -88,6 +91,7 @@
 <br />
 <hr />
 <br />
+@* Completed Projects *@
 <div class="container bg-light">
     <h4 class="text-center">Ferdigstilte Prosjekter</h4>
     <table class="table table-hover" id="doneProjects">
@@ -103,22 +107,22 @@
         <tbody>
             @foreach (var item in Model.CompletedProjects)
             {
-            <tr>
-                <td>@Html.DisplayFor(model => item.ProjectName)</td>
-                <td>@Html.DisplayFor(model => item.ProjectRegistered)</td>
-                <td>@Html.DisplayFor(model => item.ProjectPlannedStart)</td>
-                <td>@Html.DisplayFor(model => item.ProjectPlannedEnd)</td>
-                <td>
-                    @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }, new { @class = "btn btn-success" })
+                <tr>
+                    <td>@Html.DisplayFor(model => item.ProjectName)</td>
+                    <td>@Html.DisplayFor(model => item.ProjectRegistered)</td>
+                    <td>@Html.DisplayFor(model => item.ProjectPlannedStart)</td>
+                    <td>@Html.DisplayFor(model => item.ProjectPlannedEnd)</td>
+                    <td>
+                        @Html.ActionLink("Detaljer", "ViewProject", new { id = item.Unique_ProjectIdString }, new { @class = "btn btn-success" })
 
-                    @Html.ActionLink("Endre", "edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-warning" })
+                        @Html.ActionLink("Endre", "EditProject", new { id = item.Unique_ProjectIdString }, new { @class = "btn btn-warning" })
 
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirm"
-                            data-id="@item.Unique_ProjectIdString" data-name="@item.ProjectName">
-                        Slett
-                    </button>
-                </td>
-            </tr>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirm"
+                                data-id="@item.Unique_ProjectIdString" data-name="@item.ProjectName">
+                            Slett
+                        </button>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>

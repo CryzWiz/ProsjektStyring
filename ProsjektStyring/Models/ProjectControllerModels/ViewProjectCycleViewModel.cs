@@ -9,16 +9,10 @@ namespace ProsjektStyring.Models.ProjectControllerModels
 {
     public class ViewProjectCycleViewModel
     {
-        
-        public ProjectCycle ProjectCycle { get; set; }
 
         [Required(ErrorMessage = "Syklus-id mangler")]
         [Display(Name = "Syklus-id")]
         public string tprojectCycleId { get; set; }
-
-        [Required(ErrorMessage = "Brukernavn mangler")]
-        [Display(Name = "Bruker")]
-        public string user { get; set; }
 
         [Required(ErrorMessage = "Navn for oppgaven må fylles ut")]
         [Display(Name = "Oppgave")]
@@ -39,6 +33,8 @@ namespace ProsjektStyring.Models.ProjectControllerModels
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Frist")]
         public DateTime tdueDate { get; set; }
+
+        public ProjectCycle ProjectCycle { get; set; }
 
 
     }

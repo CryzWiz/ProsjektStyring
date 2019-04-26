@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProsjektStyring.Models.ProjectApiControllerModels
 {
-    public class AddProjectCycle
+    public class EditProjectCycle
     {
-        public string projectId { get; set; }
-        public string user { get; set; }
+
+        public string unique_CycleIdString { get; set; }
         public string cycleName { get; set; }
         public string cycleDescription { get; set; }
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
+        public bool cycleActive { get; set; }
+        public bool cycleFinished { get; set; }
+        public string user { get; set; }
     }
 }

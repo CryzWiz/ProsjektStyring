@@ -20,7 +20,7 @@
         <dl class="row">
             <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Project.ProjectClient):</dt>
             <dd class="col-sm-4">@Html.DisplayFor(model => model.Project.ProjectClient)</dd>
-            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Project.ProjectCompleted):</dt>
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Project.ProjectActive):</dt>
             @if (Model.Project.ProjectActive)
             {
                 <dd class="col-sm-4"><span style="color:green">Aktiv</span></dd>
@@ -112,9 +112,10 @@
                                     Stengt
                                 </td>
                             }
-                            <td>
-                                @Html.ActionLink("Detaljer", "ViewProjectCycle", new { id = item.Unique_CycleIdString })
-                            </td>
+                                <td>
+                                    @Html.ActionLink("Detaljer", "ViewProjectCycle", new { id = item.Unique_CycleIdString }) |
+                                    @Html.ActionLink("Endre", "EditProjectCycle", new { id = item.Unique_CycleIdString })
+                                </td>
                         </tr>
                     }
                 </tbody>
@@ -154,10 +155,6 @@
                                 <div class="form-group">
                                     <label asp-for="endDate" class="control-label"></label>
                                     <input asp-for="endDate" class="form-control" value="@DateTime.Now"/>
-                                    <span asp-validation-for="endDate" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <input asp-for="user" class="form-control" value="@User.Identity.Name" hidden />
                                     <span asp-validation-for="endDate" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">

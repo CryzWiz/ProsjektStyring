@@ -96,9 +96,10 @@
                                         Ikke fullført
                                     </td>
                                 }
-                                <td>
-                                    @Html.ActionLink("Detaljer", "ViewProjectCycleTask", new { id = item.Unique_TaskIdString })
-                                </td>
+                                    <td>
+                                        @Html.ActionLink("Detaljer", "ViewProjectCycleTask", new { id = item.Unique_TaskIdString }) |
+                                        @Html.ActionLink("Endre", "EditProjectCycleTask", new { id = item.Unique_TaskIdString })
+                                    </td>
                             </tr>
                         }
                     </tbody>
@@ -145,10 +146,6 @@
                                 <label asp-for="tdueDate" class="control-label"></label>
                                 <input asp-for="tdueDate" class="form-control" value="@DateTime.Now.Date"/>
                                 <span asp-validation-for="tdueDate" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <input asp-for="user" class="form-control" value="@User.Identity.Name" hidden />
-                                <span asp-validation-for="user" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <input asp-for="tprojectCycleId" class="form-control" value="@Model.ProjectCycle.Unique_CycleIdString" hidden />

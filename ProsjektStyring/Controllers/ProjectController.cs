@@ -23,8 +23,9 @@ namespace ProsjektStyring.Controllers
             _projectRepository = Pr;
             _userManager = uM;
         }
-
-        ////////    Index     ////////
+        ////////////////              ////////////////
+        ////////////////    Index     ////////////////
+        ////////////////              ////////////////
         [HttpGet]
         [Route("Project/")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
@@ -39,7 +40,9 @@ namespace ProsjektStyring.Controllers
             return View(model);
         }
 
-        ////////    Project-functions     ////////
+        ////////////////                          ////////////////
+        ////////////////    Project-functions     ////////////////
+        ////////////////                          ////////////////
         [HttpGet]
         [Route("Project/{id}")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
@@ -53,7 +56,6 @@ namespace ProsjektStyring.Controllers
             };
             return View(model);
         }
-
         [HttpGet]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public IActionResult CreateProject()
@@ -73,7 +75,7 @@ namespace ProsjektStyring.Controllers
             {
                 var user = await _userManager.GetUserAsync(User);
 
-                Project p = new Project { };
+                AddProject p = new AddProject { };
                 p.ProjectName = model.ProjectName;
                 p.ProjectClient = model.ProjectClient;
                 p.ProjectDescription = model.ProjectDescription;
@@ -127,7 +129,86 @@ namespace ProsjektStyring.Controllers
             }
         }
 
-        ////////    ProjectCycle-functions     ////////
+        [HttpGet]
+        [Route("Project/EditProject/{id}")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> EditProject([FromRoute] string id)
+        {
+            if (id != null)
+            {
+                Project p = await _projectRepository.GetProjectByUniqueId(id);
+
+                if (p != null)
+                {
+                    EditProjectViewModel model = new EditProjectViewModel
+                    {
+                        ProjectName = p.ProjectName,
+                        Unique_ProjectIdString = p.Unique_ProjectIdString,
+                        ProjectClient = p.ProjectClient,
+                        ProjectDescription = p.ProjectDescription,
+                        ProjectActive = p.ProjectActive,
+                        ProjectCompleted = p.ProjectCompleted,
+                        ProjectPlannedStart = p.ProjectPlannedStart,
+                        ProjectPlannedEnd = p.ProjectPlannedEnd                      
+
+                    };
+                    return View(model);
+                }
+                else
+                {
+                    TempData["error"] = "Klarte ikke å finne rett prosjekt. Kontakt teknisk om det fortsetter.";
+                    return RedirectToAction("Project", new { id = id });
+                }
+            }
+            else
+            {
+                TempData["error"] = "Feil med mottatt data. ModelStateInvalid!";
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> EditProject([FromForm]
+        [Bind("Unique_ProjectIdString", "ProjectName", "ProjectClient", "ProjectDescription", "ProjectActive", "ProjectCompleted", "ProjectPlannedStart", "ProjectPlannedEnd")]
+        EditProjectViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                EditProject p = new EditProject { };
+                p.Unique_ProjectIdString = model.Unique_ProjectIdString;
+                p.ProjectName = model.ProjectName;
+                p.ProjectDescription = model.ProjectDescription;
+                p.ProjectClient = model.ProjectClient;
+                p.ProjectActive = model.ProjectActive;
+                p.ProjectCompleted = model.ProjectCompleted;
+                p.ProjectPlannedEnd = model.ProjectPlannedEnd;
+                p.ProjectPlannedStart = model.ProjectPlannedStart;
+                p.user = user.UserName;
+
+                if(await _projectRepository.EditProjectAsync(p))
+                {
+                    TempData["success"] = string.Format("Prosjekt {0} er oppdatert!", model.ProjectName);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = string.Format("Prosjekt {0} er ikke oppdatert. Ingen endringer oppdaget!", model.ProjectName);
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                TempData["error"] = "Feil med mottatt data. ModelStateInvalid!";
+                return RedirectToAction("Index");
+            }
+        }
+
+        ////////////////                                ////////////////
+        ////////////////    ProjectCycle-functions      ////////////////
+        ////////////////                                ////////////////
         [HttpGet]
         [Route("Project/ViewProjectCycle/{id}")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
@@ -147,11 +228,13 @@ namespace ProsjektStyring.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> AddProjectCycle([FromForm]
-        [Bind("projectId", "user", "cycleName", "cycleDescription", "startDate", "endDate")]
+        [Bind("projectId", "cycleName", "cycleDescription", "startDate", "endDate")]
         ViewProjectViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User);
+
                 AddProjectCycle c = new AddProjectCycle
                 {
                     cycleName = model.cycleName,
@@ -159,7 +242,7 @@ namespace ProsjektStyring.Controllers
                     startDate = model.startDate,
                     endDate = model.endDate,
                     projectId = model.projectId,
-                    user = model.user
+                    user = user.UserName
                 };
                 var r = await _projectRepository.AddCycleToProjectAsync(c);
                 if (r != null)
@@ -208,7 +291,73 @@ namespace ProsjektStyring.Controllers
             }
         }
 
-        ////////    ProjectCycleTask-functions    ////////
+        [HttpGet]
+        [Route("Project/EditProjectCycle/{id}")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> EditProjectCycle([FromRoute] string id)
+        {
+            ProjectCycle c = await _projectRepository.GetProjectCycleByUniqueId(id);
+
+            EditProjectCycleViewModel model = new EditProjectCycleViewModel
+            {
+                unique_CycleIdString = c.Unique_CycleIdString,
+                cycleName = c.CycleName,
+                cycleDescription = c.CycleDescription,
+                startDate = c.CyclePlannedStart,
+                endDate = c.CyclePlannedEnd,
+                cycleActive = c.CycleActive,
+                cycleFinished = c.CycleFinished
+
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> EditProjectCycle([FromForm]
+        [Bind("unique_CycleIdString", "cycleName", "cycleDescription", "startDate", "endDate", "cycleActive", "cycleFinished")]
+        EditProjectCycle model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                EditProjectCycle pC = new EditProjectCycle
+                {
+                    unique_CycleIdString = model.unique_CycleIdString,
+                    cycleName = model.cycleName,
+                    cycleDescription = model.cycleDescription,
+                    startDate = model.startDate,
+                    endDate = model.endDate,
+                    cycleActive = model.cycleActive,
+                    cycleFinished = model.cycleFinished,
+                    user = user.UserName
+                    
+                };
+
+                if (await _projectRepository.EditProjectCycleAsync(pC))
+                {
+                    TempData["success"] = string.Format("Syklus \"{0}\" er oppdatert!", model.cycleName);
+                    return RedirectToAction("ViewProjectCycle", new { id = model.unique_CycleIdString });
+                }
+                else
+                {
+                    TempData["error"] = string.Format("Syklus \"{0}\" er ikke oppdatert. Ingen endringer oppdaget!", model.cycleName);
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                TempData["error"] = "Feil med mottatt data. ModelStateInvalid!";
+                return RedirectToAction("Index");
+            }
+        }
+
+
+        ////////////////                                    ////////////////
+        ////////////////    ProjectCycleTask-functions      ////////////////
+        ////////////////                                    ////////////////
         [HttpGet]
         [Route("Project/ViewProjectCycleTask/{id}")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole + " , " + RoleOptions.MemberRole)]
@@ -220,7 +369,7 @@ namespace ProsjektStyring.Controllers
 
             ViewProjectCycleTaskViewModel model = new ViewProjectCycleTaskViewModel
             {
-                ProjectCycleTask = t,
+                ProjectCycleTask = await _projectRepository.GetProjectCycleTaskByUniqueId(id),
                 ProjectCycle = c,
                 Project = p
             };
@@ -232,11 +381,11 @@ namespace ProsjektStyring.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> AddCycleTask([FromForm]
-        [Bind("tprojectCycleId", "user", "taskName", "taskDescription", "tplannedHours", "tdueDate")]
-        ViewProjectCycleViewModel model)
+        [Bind("tprojectCycleId", "taskName", "taskDescription", "tplannedHours", "tdueDate")] ViewProjectCycleViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User);
                 AddProjectCycleTask t = new AddProjectCycleTask
                 {
                     cycleTaskName = model.taskName,
@@ -244,7 +393,7 @@ namespace ProsjektStyring.Controllers
                     plannedHours = model.tplannedHours,
                     dueDate = model.tdueDate,
                     projectCycleId = model.tprojectCycleId,
-                    user = model.user
+                    user = user.UserName
                 };
                 var r = await _projectRepository.AddTaskToCycleAsync(t);
                 if (r != null)
@@ -293,11 +442,72 @@ namespace ProsjektStyring.Controllers
             }
         }
 
-        
+        [HttpGet]
+        [Route("Project/ViewProjectCycle/EditProjectCycleTask/{id}")]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> EditProjectCycleTask([FromRoute] string id)
+        {
+            ProjectCycleTask c = await _projectRepository.GetProjectCycleTaskByUniqueId(id);
 
-        
-        
-        
+            EditProjectCycleTaskViewModel model = new EditProjectCycleTaskViewModel
+            {
+                unique_TaskIdString = c.Unique_TaskIdString,
+                cycleTaskName = c.TaskName,
+                cycleTaskDescription = c.TaskDescription,
+                plannedHours = c.PlannedHours,
+                dueDate = c.TaskDueDate,
+                taskActive = c.TaskActive
+
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
+        public async Task<IActionResult> EditProjectCycleTask([FromForm]
+        [Bind("unique_TaskIdString", "cycleTaskName", "cycleTaskDescription", "plannedHours", "dueDate", "taskActive")]
+        EditProjectCycleTask model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                EditProjectCycleTask task = new EditProjectCycleTask
+                {
+                    unique_TaskIdString = model.unique_TaskIdString,
+                    user = user.UserName,
+                    cycleTaskName = model.cycleTaskName,
+                    cycleTaskDescription = model.cycleTaskDescription,
+                    plannedHours = model.plannedHours,
+                    dueDate = model.dueDate,
+                    taskActive = model.taskActive
+
+                };
+
+                if (await _projectRepository.EditProjectCycleTaskAsync(task))
+                {
+                    TempData["success"] = string.Format("Oppgave \"{0}\" er oppdatert!", model.cycleTaskName);
+                    return RedirectToAction("ViewProjectCycleTask", new { id = model.unique_TaskIdString });
+                }
+                else
+                {
+                    TempData["error"] = string.Format("Oppgave \"{0}\" er ikke oppdatert. Ingen endringer oppdaget!", model.cycleTaskName);
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                TempData["error"] = "Feil med mottatt data. ModelStateInvalid!";
+                return RedirectToAction("Index");
+            }
+        }
+
+
+
+
+
+
 
     }
 }

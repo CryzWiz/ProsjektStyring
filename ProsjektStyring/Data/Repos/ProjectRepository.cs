@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ProsjektStyring.Data;
 using ProsjektStyring.Models.IRepositorys;
 using ProsjektStyring.Models.ProjectApiControllerModels;
+using ProsjektStyring.Models.ProjectControllerModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,21 @@ namespace ProsjektStyring.Models.Repositorys
             _db = db;
         }
 
-
-        public async Task<string> CreateProject(Project project)
+        ///////////////                //////////////
+        ///////////////     Project    //////////////
+        ///////////////                //////////////
+        public async Task<string> CreateProject(AddProject project)
         {
+            Project p = new Project { };
+            p.ProjectName = project.ProjectName;
+            p.ProjectClient = project.ProjectClient;
+            p.ProjectDescription = project.ProjectDescription;
+            p.ProjectPlannedStart = project.ProjectPlannedStart;
+            p.ProjectPlannedEnd = project.ProjectPlannedEnd;
+            p.ProjectCreatedByUser = project.ProjectCreatedByUser;
 
-            project.ProjectRegistered = DateTime.Now;
-            project.Unique_ProjectIdString = getGuid();
+            p.ProjectRegistered = DateTime.Now;
+            p.Unique_ProjectIdString = getGuid();
            
             ProjectCycle initCycle = new ProjectCycle
             {
@@ -40,19 +50,17 @@ namespace ProsjektStyring.Models.Repositorys
 
             List<ProjectCycle> initList = new List<ProjectCycle>();
             initList.Add(initCycle);
-            project.ProjectCycles = initList;
-            project.NumberOfProjectCycles = initList.Count;
+            p.ProjectCycles = initList;
+            p.NumberOfProjectCycles = initList.Count;
 
-            await _db.AddAsync(project);
+            _db.Project.Add(p);
             if (await _db.SaveChangesAsync() > 0)
             {
 
-                return project.Unique_ProjectIdString;
+                return p.Unique_ProjectIdString;
             }
             else return null;
         }
-
-        ////////////    Getters for Project by status   ////////////
         public async Task<List<Project>> GetActiveProjectsAsync()
         {
             var projects = await Task.Run(() => _db.Project.Where(x => x.ProjectActive == true).ToList());
@@ -68,37 +76,61 @@ namespace ProsjektStyring.Models.Repositorys
             var projects = await Task.Run(() => _db.Project.Where(x => x.ProjectCompleted == true).ToList());
             return projects;
         }
-
-
-        ////////////    Getters for Project, ProjectCycle and ProjectCycleTask  ////////////
-        /*  Getters for Project, ProjectCycle and ProjectCycleTask by unique id string and id
-            UniqueId methods returns all containing underclasses 
-            -> Project inluces Cycles and Comments.
-            -> ProjectCycles includes Tasks and Comments
-            -> ProjectCycleTasks includes Comments
-            Fetching by int ID only returns single entity
-        */
         public async Task<Project> GetProjectByUniqueId(string id)
         {
             var project = await Task.Run(() => _db.Project.Include("ProjectCycles").Include("ProjectComments").FirstOrDefault(x => x.Unique_ProjectIdString == id));
             return project;
         }
+        public async Task<Project> GetProjectByUniqueId(int id)
+        {
+            var project = await Task.Run(() => _db.Project.FirstOrDefault(x => x.ProjectId == id));
+            return project;
+        }
+        // TODO: Edit all updates correct -ie comleted, active...
+        public async Task<bool> EditProjectAsync(EditProject project)
+        {
+            Project p = await GetProjectByUniqueId(project.Unique_ProjectIdString);
+
+            if (project.ProjectName != p.ProjectName) p.ProjectName = project.ProjectName;
+            if (project.ProjectClient != p.ProjectClient) p.ProjectClient = project.ProjectClient;
+            if (project.ProjectDescription != p.ProjectDescription) p.ProjectDescription = project.ProjectDescription;
+            if (project.ProjectActive != p.ProjectActive) p.ProjectActive = project.ProjectActive;
+            if (project.ProjectCompleted != p.ProjectCompleted) p.ProjectCompleted = project.ProjectCompleted;
+            if (project.ProjectPlannedEnd != p.ProjectPlannedEnd) p.ProjectPlannedEnd = project.ProjectPlannedEnd;
+            if (project.ProjectPlannedStart != p.ProjectPlannedStart) p.ProjectPlannedStart = project.ProjectPlannedStart;
+
+            _db.Update(p);
+            if (await _db.SaveChangesAsync() > 0)
+            {
+                return true;
+            }
+            else return false;
+        }
+        public async Task<string> DeleteProjectAsync(string unique_id)
+        {
+            Project p = await GetProjectByUniqueId(unique_id);
+            if (p != null)
+            {
+                string name = p.ProjectName;
+                _db.RemoveRange(p);
+                if (await _db.SaveChangesAsync() > 0)
+                {
+                    return name;
+                }
+                else return null;
+            }
+            else return null;
+        }
+
+        ///////////////                     //////////////
+        ///////////////     ProjectCycle    //////////////
+        ///////////////                     //////////////
         public async Task<ProjectCycle> GetProjectCycleByUniqueId(string id)
         {
             var cycle = await _db.ProjectCycle.Include("ProjectCycleTasks").Include("ProjectCycleComments").FirstOrDefaultAsync(x => x.Unique_CycleIdString == id);
             var p = await _db.Project.FirstOrDefaultAsync(x => x.ProjectId == cycle.ProjectId);
             cycle.Project = p;
             return cycle;
-        }
-        public async Task<ProjectCycleTask> GetProjectCycleTaskByUniqueId(string id)
-        {
-            ProjectCycleTask task = await _db.ProjectCycleTask.Include("ProjectCycleTaskComments").FirstOrDefaultAsync(x => x.Unique_TaskIdString == id);
-            return task;
-        }
-        public async Task<Project> GetProjectByUniqueId(int id)
-        {
-            var project = await Task.Run(() => _db.Project.FirstOrDefault(x => x.ProjectId == id));
-            return project;
         }
         public async Task<ProjectCycle> GetProjectCycleByUniqueId(int id)
         {
@@ -107,13 +139,21 @@ namespace ProsjektStyring.Models.Repositorys
             cycle.Project = p;
             return cycle;
         }
-        public async Task<ProjectCycleTask> GetProjectCycleTaskByUniqueId(int id)
+        public async Task<string> DeleteProjectCycleAsync(string unique_id)
         {
-            ProjectCycleTask task = await _db.ProjectCycleTask.FirstOrDefaultAsync(x => x.ProjectCycleTaskId == id);
-            return task;
+            ProjectCycle c = await GetProjectCycleByUniqueId(unique_id);
+            if (c != null)
+            {
+                string projectUniqueId = await getProjectCycleId(c.ProjectId);
+                _db.RemoveRange(c);
+                if (await _db.SaveChangesAsync() > 0)
+                {
+                    return projectUniqueId;
+                }
+                else return null;
+            }
+            else return null;
         }
-
-        ////////////    Adders for Project, ProjectCycle and ProjectCycleTask   ////////////
         public async Task<ProjectCycle> AddCycleToProjectAsync(AddProjectCycle pC)
         {
             Project p = await GetProjectByUniqueId(pC.projectId);
@@ -132,7 +172,7 @@ namespace ProsjektStyring.Models.Repositorys
 
             p.ProjectCycles.Add(c);
             _db.Update(p);
-            if(await _db.SaveChangesAsync() > 0)
+            if (await _db.SaveChangesAsync() > 0)
             {
                 ProjectCycle newCycle = await GetProjectCycleByUniqueId(c.Unique_CycleIdString);
                 return newCycle;
@@ -142,6 +182,41 @@ namespace ProsjektStyring.Models.Repositorys
                 return null;
             }
         }
+        // TODO: Edit all updates correct -ie comleted, active...
+        public async Task<bool> EditProjectCycleAsync(EditProjectCycle pC)
+        {
+            ProjectCycle c = await GetProjectCycleByUniqueId(pC.unique_CycleIdString);
+
+            if (pC.cycleActive != c.CycleActive) c.CycleActive = pC.cycleActive;
+            if (pC.cycleDescription != c.CycleDescription) c.CycleDescription = pC.cycleDescription;
+            if (pC.cycleFinished != c.CycleFinished) c.CycleFinished = pC.cycleFinished;
+            if (pC.cycleName != c.CycleName) c.CycleName = pC.cycleName;
+            if (pC.endDate != c.CyclePlannedEnd) c.CyclePlannedEnd = pC.endDate;
+            if (pC.startDate != c.CyclePlannedStart) c.CyclePlannedStart = pC.startDate;
+
+            _db.Update(c);
+            if (await _db.SaveChangesAsync() > 0)
+            {
+                return true;
+            }
+            else return false;
+        }
+
+
+
+        ///////////////                         ///////////////
+        ///////////////     ProjectCycleTask    ///////////////
+        ///////////////                         ///////////////
+        public async Task<ProjectCycleTask> GetProjectCycleTaskByUniqueId(string id)
+        {
+            ProjectCycleTask task = await _db.ProjectCycleTask.Include("ProjectCycleTaskComments").FirstOrDefaultAsync(x => x.Unique_TaskIdString == id);
+            return task;
+        }
+        public async Task<ProjectCycleTask> GetProjectCycleTaskByUniqueId(int id)
+        {
+            ProjectCycleTask task = await _db.ProjectCycleTask.FirstOrDefaultAsync(x => x.ProjectCycleTaskId == id);
+            return task;
+        }      
         public async Task<ProjectCycleTask> AddTaskToCycleAsync(AddProjectCycleTask cT)
         {
 
@@ -167,38 +242,7 @@ namespace ProsjektStyring.Models.Repositorys
             {
                 return null;
             }
-        }
-
-        public async Task<string> DeleteProjectAsync(string unique_id)
-        {
-            Project p = await GetProjectByUniqueId(unique_id);
-            if (p != null)
-            {
-                string name = p.ProjectName;
-                _db.RemoveRange(p);
-                if (await _db.SaveChangesAsync() > 0)
-                {
-                    return name;
-                }
-                else return null;
-            }
-            else return null;
-        }
-        public async Task<string> DeleteProjectCycleAsync(string unique_id)
-        {
-            ProjectCycle c = await GetProjectCycleByUniqueId(unique_id);
-            if (c != null)
-            {
-                string projectUniqueId = await getProjectCycleId(c.ProjectId);
-                _db.RemoveRange(c);
-                if (await _db.SaveChangesAsync() > 0)
-                {
-                    return projectUniqueId;
-                }
-                else return null;
-            }
-            else return null;
-        }
+        }      
         public async Task<string> DeleteProjectCycleTaskAsync(string unique_id)
         {
             ProjectCycleTask t = await GetProjectCycleTaskByUniqueId(unique_id);
@@ -214,8 +258,29 @@ namespace ProsjektStyring.Models.Repositorys
             }
             else return null;
         }
+        // TODO: Edit all updates correct -ie comleted, active...
+        public async Task<bool> EditProjectCycleTaskAsync(EditProjectCycleTask task)
+        {
+            ProjectCycleTask c = await GetProjectCycleTaskByUniqueId(task.unique_TaskIdString);
 
-        ////////////    Comments -> Should maby have their own controller in time    ////////////////
+            if (task.cycleTaskName != c.TaskName) c.TaskName = task.cycleTaskName;
+            if (task.cycleTaskDescription != c.TaskDescription) c.TaskDescription = task.cycleTaskDescription;
+            if (task.plannedHours != c.PlannedHours) c.PlannedHours = task.plannedHours;
+            if (task.dueDate != c.TaskDueDate) c.TaskDueDate = task.dueDate;
+            if (task.taskActive != c.TaskActive) c.TaskActive = task.taskActive;
+            _db.Update(c);
+            if (await _db.SaveChangesAsync() > 0)
+            {
+                return true;
+            }
+            else return false;
+        }
+
+
+        ////////////////                        ////////////////
+        ////////////////        Comments        ////////////////
+        // Are divided in 3 just in case we want to make the  //
+        // comment-sections different. Information etc..      //
         public async Task<ProjectComment> AddProjectCommentAsync(AddProjectComment pC)
         {
 
@@ -231,8 +296,7 @@ namespace ProsjektStyring.Models.Repositorys
             _db.Add(comment);
             if (await _db.SaveChangesAsync() > 0)
             {
-                var c = await _db.ProjectComment.FirstOrDefaultAsync(x => x.Unique_IdString == comment.Unique_IdString);
-                return c;
+                return comment;
             }
             else return null;
         }
@@ -250,8 +314,7 @@ namespace ProsjektStyring.Models.Repositorys
             _db.Add(comment);
             if (await _db.SaveChangesAsync() > 0)
             {
-                var c = await _db.ProjectCycleComment.FirstOrDefaultAsync(x => x.Unique_IdString == comment.Unique_IdString);
-                return c;
+                return comment;
             }
             else return null;
         }
@@ -268,15 +331,16 @@ namespace ProsjektStyring.Models.Repositorys
             };
             _db.Add(comment);
             if (await _db.SaveChangesAsync() > 0)
-            {
-                var c = await _db.ProjectCycleTaskComment.FirstOrDefaultAsync(x => x.Unique_IdString == comment.Unique_IdString);
-                return c;
+            {         
+                return comment;
             }
             else return null;
         }
 
 
-        ////////////    Helpers    ////////////////
+        ///////////////                         ///////////////
+        ///////////////     Private Helpers     ///////////////
+        ///////////////                         ///////////////
         private string getGuid()
         {
             Guid g = Guid.NewGuid();
@@ -311,7 +375,7 @@ namespace ProsjektStyring.Models.Repositorys
         private async Task<int> getProjectCycleTaskId(string uniqueId)
         {
             var c = await _db.ProjectCycleTask.FirstOrDefaultAsync(x => x.Unique_TaskIdString == uniqueId);
-            return c.ProjectCycleId;
+            return c.ProjectCycleTaskId;
         }
         private async Task<string> getProjectCycleTaskId(int id)
         {
@@ -319,6 +383,6 @@ namespace ProsjektStyring.Models.Repositorys
             return c.Unique_TaskIdString;
         }
 
-
+      
     }
 }

@@ -59,6 +59,7 @@ namespace ProsjektStyring.Data
 
         [Display(Name = "Opprettet av")]
         public string ProjectCreatedByUser { get; set; }
+
         [Display(Name = "Lukket av")]
         public string ProjectClosedByUser { get; set; }
 

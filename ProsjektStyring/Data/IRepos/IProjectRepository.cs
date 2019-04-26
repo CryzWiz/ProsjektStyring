@@ -1,5 +1,6 @@
 ﻿using ProsjektStyring.Data;
 using ProsjektStyring.Models.ProjectApiControllerModels;
+using ProsjektStyring.Models.ProjectControllerModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,18 +40,24 @@ namespace ProsjektStyring.Models.IRepositorys
         /// Creates a new project in the database, and returns the Unique_id for that
         /// project if ok, else it will return null.
         /// </summary>
-        Task<string> CreateProject(Project project);
+        Task<string> CreateProject(AddProject project);
         /// <summary>
         /// Delete given Project and all corresponding data.
         /// Return name for Project if ok. Null if not ok.
         /// Also deletes comments to this entity and sub-entitys.
         /// </summary>
         Task<string> DeleteProjectAsync(string unique_id);
+        /// <summary>
+        /// Updates the given Project, and returns true if updated,
+        /// false if not.
+        /// </summary>
+        Task<bool> EditProjectAsync(EditProject project);
 
 
         ///////////////                     //////////////
         ///////////////     ProjectCycle    //////////////
         ///////////////                     //////////////
+        Task<bool> EditProjectCycleAsync(EditProjectCycle pC);
         /// <summary>
         /// Takes the ProjectCycleId and returns the
         /// ProjectCycle if found. Else it returns null
@@ -81,6 +88,7 @@ namespace ProsjektStyring.Models.IRepositorys
         ///////////////                         ///////////////
         ///////////////     ProjectCycleTask    ///////////////
         ///////////////                         ///////////////
+        Task<bool> EditProjectCycleTaskAsync(EditProjectCycleTask task);
         /// <summary>
         /// Takes the ProjectCycleTaskId and returns the
         /// ProjectCycleTask if found. Else it returns null
@@ -107,9 +115,10 @@ namespace ProsjektStyring.Models.IRepositorys
         Task<string> DeleteProjectCycleTaskAsync(string unique_id);
 
 
-        ///////////////                 ///////////////
-        ///////////////     Comments    ///////////////
-        ///////////////                 ///////////////
+        ////////////////                        ////////////////
+        ////////////////        Comments        ////////////////
+        // Are divided in 3 just in case we want to make the  //
+        // comment-sections different. Information etc..      //
         /// <summary>
         /// Takes a AddProjectComment object, converts it to a ProjectComment
         /// and adds it to the right Project. Returns the new ProjectComment

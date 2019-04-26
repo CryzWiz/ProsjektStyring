@@ -40,15 +40,15 @@
     </div>
 </div>
 
-@* ProjectCycleComments *@
+@* ProjectCycleTaskComments *@
 <div class="row">
     <div class="container">
         <h4 class="text-center">Kommentarer til denne oppgaven</h4>
 
         <div class="col-lg-12 col-md-12 col-sm-12" id="pComments">
-            @if (Model.ProjectCycle.ProjectCycleComments != null)
+            @if (Model.ProjectCycleTask.ProjectCycleTaskComments != null)
             {
-                foreach (var item in Model.ProjectCycle.ProjectCycleComments)
+                foreach (var item in Model.ProjectCycleTask.ProjectCycleTaskComments)
                 {
                     <div class="card mb-3">
                         <div class="card-body">
