@@ -69,21 +69,14 @@ namespace ProsjektStyring.Controllers
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> CreateProject([FromForm]
         [Bind("ProjectName", "ProjectClient", "ProjectDescription", "ProjectPlannedStart", "ProjectPlannedEnd")]
-        CreateProjectViewModel model)
+        AddProject model)
         {
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
+                model.ProjectCreatedByUser = user.UserName;
 
-                AddProject p = new AddProject { };
-                p.ProjectName = model.ProjectName;
-                p.ProjectClient = model.ProjectClient;
-                p.ProjectDescription = model.ProjectDescription;
-                p.ProjectPlannedStart = model.ProjectPlannedStart;
-                p.ProjectPlannedEnd = model.ProjectPlannedEnd;
-                p.ProjectCreatedByUser = user.UserName;
-
-                var r = await _projectRepository.CreateProject(p);
+                var r = await _projectRepository.CreateProject(model);
                 if (r != null)
                 {
                     ViewData["success"] = "Nytt prosjekt er opprettet.";
@@ -172,23 +165,14 @@ namespace ProsjektStyring.Controllers
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> EditProject([FromForm]
         [Bind("Unique_ProjectIdString", "ProjectName", "ProjectClient", "ProjectDescription", "ProjectActive", "ProjectCompleted", "ProjectPlannedStart", "ProjectPlannedEnd")]
-        EditProjectViewModel model)
+        EditProject model)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.GetUserAsync(User);
-                EditProject p = new EditProject { };
-                p.Unique_ProjectIdString = model.Unique_ProjectIdString;
-                p.ProjectName = model.ProjectName;
-                p.ProjectDescription = model.ProjectDescription;
-                p.ProjectClient = model.ProjectClient;
-                p.ProjectActive = model.ProjectActive;
-                p.ProjectCompleted = model.ProjectCompleted;
-                p.ProjectPlannedEnd = model.ProjectPlannedEnd;
-                p.ProjectPlannedStart = model.ProjectPlannedStart;
-                p.user = user.UserName;
+                var user = await _userManager.GetUserAsync(User);               
+                model.user = user.UserName;
 
-                if(await _projectRepository.EditProjectAsync(p))
+                if (await _projectRepository.EditProjectAsync(model))
                 {
                     TempData["success"] = string.Format("Prosjekt {0} er oppdatert!", model.ProjectName);
                     return RedirectToAction("Index");
@@ -229,22 +213,14 @@ namespace ProsjektStyring.Controllers
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> AddProjectCycle([FromForm]
         [Bind("projectId", "cycleName", "cycleDescription", "startDate", "endDate")]
-        ViewProjectViewModel model)
+        AddProjectCycle model)
         {
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
+                model.user = user.UserName;
 
-                AddProjectCycle c = new AddProjectCycle
-                {
-                    cycleName = model.cycleName,
-                    cycleDescription = model.cycleDescription,
-                    startDate = model.startDate,
-                    endDate = model.endDate,
-                    projectId = model.projectId,
-                    user = user.UserName
-                };
-                var r = await _projectRepository.AddCycleToProjectAsync(c);
+                var r = await _projectRepository.AddCycleToProjectAsync(model);
                 if (r != null)
                 {
                     TempData["success"] = "Ny syklus er lagt til.";
@@ -323,20 +299,9 @@ namespace ProsjektStyring.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
-                EditProjectCycle pC = new EditProjectCycle
-                {
-                    unique_CycleIdString = model.unique_CycleIdString,
-                    cycleName = model.cycleName,
-                    cycleDescription = model.cycleDescription,
-                    startDate = model.startDate,
-                    endDate = model.endDate,
-                    cycleActive = model.cycleActive,
-                    cycleFinished = model.cycleFinished,
-                    user = user.UserName
-                    
-                };
+                model.user = user.UserName;
 
-                if (await _projectRepository.EditProjectCycleAsync(pC))
+                if (await _projectRepository.EditProjectCycleAsync(model))
                 {
                     TempData["success"] = string.Format("Syklus \"{0}\" er oppdatert!", model.cycleName);
                     return RedirectToAction("ViewProjectCycle", new { id = model.unique_CycleIdString });
@@ -381,37 +346,31 @@ namespace ProsjektStyring.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> AddCycleTask([FromForm]
-        [Bind("tprojectCycleId", "taskName", "taskDescription", "tplannedHours", "tdueDate")] ViewProjectCycleViewModel model)
+        [Bind("projectCycleId", "cycleTaskName", "cycleTaskDescription", "plannedHours", "dueDate")]
+        AddProjectCycleTask model)
         {
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
-                AddProjectCycleTask t = new AddProjectCycleTask
-                {
-                    cycleTaskName = model.taskName,
-                    cycleTaskDescription = model.taskDescription,
-                    plannedHours = model.tplannedHours,
-                    dueDate = model.tdueDate,
-                    projectCycleId = model.tprojectCycleId,
-                    user = user.UserName
-                };
-                var r = await _projectRepository.AddTaskToCycleAsync(t);
+                model.user = user.UserName;
+               
+                var r = await _projectRepository.AddTaskToCycleAsync(model);
                 if (r != null)
                 {
                     TempData["success"] = "Ny oppgave er lagt til.";
-                    return RedirectToAction("ViewProjectCycle", new { id = model.tprojectCycleId });
+                    return RedirectToAction("ViewProjectCycle", new { id = model.projectCycleId });
                 }
                 else
                 {
                     TempData["error"] = "Noe gikk galt. Prøv igjen. Om feilen vedvarer, kontakt teknisk support.";
-                    return RedirectToAction("ViewProjectCycle", new { id = model.tprojectCycleId });
+                    return RedirectToAction("ViewProjectCycle", new { id = model.projectCycleId });
                 }
 
             }
             else
             {
                 TempData["error"] = "Feil med mottatt data. ModelStateInvalid!";
-                return RedirectToAction("ViewProjectCycle", new { id = model.tprojectCycleId });
+                return RedirectToAction("ViewProjectCycle", new { id = model.projectCycleId });
             }
 
         }
@@ -443,7 +402,7 @@ namespace ProsjektStyring.Controllers
         }
 
         [HttpGet]
-        [Route("Project/ViewProjectCycle/EditProjectCycleTask/{id}")]
+        [Route("Project/EditProjectCycleTask/{id}")]
         [Authorize(Roles = RoleOptions.AdminRole + "," + RoleOptions.TeamLeaderRole)]
         public async Task<IActionResult> EditProjectCycleTask([FromRoute] string id)
         {
@@ -473,19 +432,8 @@ namespace ProsjektStyring.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
-                EditProjectCycleTask task = new EditProjectCycleTask
-                {
-                    unique_TaskIdString = model.unique_TaskIdString,
-                    user = user.UserName,
-                    cycleTaskName = model.cycleTaskName,
-                    cycleTaskDescription = model.cycleTaskDescription,
-                    plannedHours = model.plannedHours,
-                    dueDate = model.dueDate,
-                    taskActive = model.taskActive
 
-                };
-
-                if (await _projectRepository.EditProjectCycleTaskAsync(task))
+                if (await _projectRepository.EditProjectCycleTaskAsync(model))
                 {
                     TempData["success"] = string.Format("Oppgave \"{0}\" er oppdatert!", model.cycleTaskName);
                     return RedirectToAction("ViewProjectCycleTask", new { id = model.unique_TaskIdString });

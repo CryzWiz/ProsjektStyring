@@ -1,10 +1,10 @@
 ﻿@model ProsjektStyring.Models.ProjectControllerModels.EditProjectViewModel
 
 @{
-    ViewData["Title"] = "Oppdater " + Model.ProjectName;
+    ViewData["Title"] = "Oppdater \"" + Model.ProjectName + "\"";
 }
 
-<h4>Oppdater prosjektdata for "@Html.DisplayFor(model => model.ProjectName)"</h4>
+<h4>Oppdater detaljer for prosjekt "@Html.DisplayFor(model => model.ProjectName)"</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">

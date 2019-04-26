@@ -128,28 +128,28 @@
                             <form asp-action="AddCycleTask">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
-                                <label asp-for="taskName" class="control-label"></label>
-                                <input asp-for="taskName" class="form-control" />
-                                <span asp-validation-for="taskName" class="text-danger"></span>
+                                <label asp-for="cycleTaskName" class="control-label"></label>
+                                <input asp-for="cycleTaskName" class="form-control" />
+                                <span asp-validation-for="cycleTaskName" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="taskDescription" class="control-label"></label>
-                                <input asp-for="taskDescription" class="form-control" />
-                                <span asp-validation-for="taskDescription" class="text-danger"></span>
+                                <label asp-for="cycleTaskDescription" class="control-label"></label>
+                                <input asp-for="cycleTaskDescription" class="form-control" />
+                                <span asp-validation-for="cycleTaskDescription" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="tplannedHours" class="control-label"></label>
-                                <input asp-for="tplannedHours" class="form-control" placeholder="i timer. Bruk desimaler for minutt" />
-                                <span asp-validation-for="tplannedHours" class="text-danger"></span>
+                                <label asp-for="plannedHours" class="control-label"></label>
+                                <input asp-for="plannedHours" class="form-control" placeholder="i timer. Bruk desimaler for minutt" />
+                                <span asp-validation-for="plannedHours" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="tdueDate" class="control-label"></label>
-                                <input asp-for="tdueDate" class="form-control" value="@DateTime.Now.Date"/>
-                                <span asp-validation-for="tdueDate" class="text-danger"></span>
+                                <label asp-for="dueDate" class="control-label"></label>
+                                <input asp-for="dueDate" class="form-control" value="@DateTime.Now.Date"/>
+                                <span asp-validation-for="dueDate" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <input asp-for="tprojectCycleId" class="form-control" value="@Model.ProjectCycle.Unique_CycleIdString" hidden />
-                                <span asp-validation-for="tprojectCycleId" class="text-danger"></span>
+                                <input asp-for="projectCycleId" class="form-control" value="@Model.ProjectCycle.Unique_CycleIdString" hidden />
+                                <span asp-validation-for="projectCycleId" class="text-danger"></span>
                             </div>
 
                             <div class="modal-footer">

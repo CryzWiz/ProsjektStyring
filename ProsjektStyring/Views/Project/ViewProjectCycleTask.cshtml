@@ -1,7 +1,7 @@
 ﻿@model ProsjektStyring.Models.ProjectControllerModels.ViewProjectCycleTaskViewModel
 
 @{
-    ViewData["Title"] = "ViewProjectCycleTask";
+    ViewData["Title"] = @Model.ProjectCycle.Project.ProjectName + " - " + @Model.ProjectCycle.CycleName + " - " + @Model.ProjectCycleTask.TaskName;
 }
 
 @* error or success message *@

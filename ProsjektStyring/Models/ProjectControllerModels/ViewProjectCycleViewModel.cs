@@ -12,27 +12,28 @@ namespace ProsjektStyring.Models.ProjectControllerModels
 
         [Required(ErrorMessage = "Syklus-id mangler")]
         [Display(Name = "Syklus-id")]
-        public string tprojectCycleId { get; set; }
+        public string projectCycleId { get; set; }
 
         [Required(ErrorMessage = "Navn for oppgaven må fylles ut")]
         [Display(Name = "Oppgave")]
-        public string taskName { get; set; }
+        public string cycleTaskName { get; set; }
 
         [Required(ErrorMessage = "Beskrivelse av oppgaven må fylles ut")]
         [Display(Name = "Beskrivelse")]
-        public string taskDescription { get; set; }
+        public string cycleTaskDescription { get; set; }
 
         [Required(ErrorMessage = "Planlagt tid må fylles ut")]
         [Range(0.1, 1000.0,
         ErrorMessage = "Verdi for {0} må være mellom {1} og {2}.")]
         [Display(Name = "Planlagt tid")]
-        public double tplannedHours { get; set; }
+        [RegularExpression("([0-9]+)", ErrorMessage = "Må være et siffer (eks: 1.2)")]
+        public double plannedHours { get; set; }
 
         [Required(ErrorMessage = "Frist for oppgaven må fylles ut")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Frist")]
-        public DateTime tdueDate { get; set; }
+        public DateTime dueDate { get; set; }
 
         public ProjectCycle ProjectCycle { get; set; }
 

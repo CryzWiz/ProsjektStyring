@@ -29,7 +29,7 @@ namespace ProsjektStyring.Models.ProjectControllerModels
         [Required(ErrorMessage = "Frist for oppgaven må oppgis")]
         [Display(Name = "Frist")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime dueDate { get; set; }
 
         [Display(Name = "Aktiv")]
