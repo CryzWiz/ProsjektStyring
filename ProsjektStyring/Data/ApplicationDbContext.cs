@@ -36,6 +36,10 @@ namespace ProsjektStyring.Data
 
             //builder.Entity<Project>().ToTable("Project");
             //builder.Entity<ProjectTask>().ToTable("ProjectTask");
+            builder.Entity<TeamMember>()
+            .HasKey(t => new { t.TeamId, t.UserId });
+            builder.Entity<TeamToProject>()
+            .HasKey(t => new { t.TeamId, t.ProjectId });
 
         }
     }

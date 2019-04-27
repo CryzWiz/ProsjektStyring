@@ -9,12 +9,10 @@ namespace ProsjektStyring.Data
 {
     public class TeamLeader
     {
-        [ForeignKey("TeamId")]
-        public int TeamId { get; set; }
+        public string Team_UniqueId { get; set; }
         public Team Team { get; set; }
 
-        [ForeignKey("UserId")]
-        public string UserId { get; set; }
+        public string UserName { get; set; }
         public ApplicationUser User { get; set; }
     }
 }
