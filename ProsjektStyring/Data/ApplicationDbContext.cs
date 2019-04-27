@@ -21,6 +21,12 @@ namespace ProsjektStyring.Data
         public virtual DbSet<ProjectCycleComment> ProjectCycleComment { get; set; }
         public virtual DbSet<ProjectCycleTaskComment> ProjectCycleTaskComment { get; set; }
 
+        public virtual DbSet<Team> Team { get; set; }
+        //public virtual DbSet<TeamLeader> TeamLeader { get; set; }
+        public virtual DbSet<TeamMember> TeamMember { get; set; }
+        public virtual DbSet<TeamToProject> TeamToProject { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
